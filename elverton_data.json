@@ -3,8 +3,8 @@
   "season": "01/02",
   "owner": "구단주",
   "manager": "레이턴 베인스",
-  "sync_version": 5,
-  "last_update": "01/02 시즌 선수 정보 시스템 추가",
+  "sync_version": 6,
+  "last_update": "01/02 시즌 선수 공격포인트 업데이트",
   "requests": [
     {
       "id": 1,
@@ -94,19 +94,19 @@
     "브래들리 바르콜라": {
       "matches": 1,
       "goals": 1,
-      "assists": 0,
+      "assists": 2,
       "mom": 0
     },
     "파트리크 쉬크": {
       "matches": 2,
       "goals": 2,
-      "assists": 0,
+      "assists": 2,
       "mom": 0
     },
     "모건 로저스": {
       "matches": 2,
       "goals": 4,
-      "assists": 0,
+      "assists": 1,
       "mom": 0
     },
     "모이스 킨": {
@@ -142,7 +142,7 @@
     "막심 더카위퍼르": {
       "matches": 0,
       "goals": 0,
-      "assists": 0,
+      "assists": 1,
       "mom": 0
     },
     "지바이로 레이드": {
@@ -184,7 +184,7 @@
     "에베레치 에제": {
       "matches": 0,
       "goals": 0,
-      "assists": 0,
+      "assists": 1,
       "mom": 0
     },
     "아담 워턴": {
@@ -202,7 +202,7 @@
     "아데몰라 루크먼": {
       "matches": 0,
       "goals": 0,
-      "assists": 0,
+      "assists": 1,
       "mom": 0
     },
     "바주마나 투레": {
