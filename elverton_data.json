@@ -3,8 +3,8 @@
   "season": "2026/27",
   "owner": "구단주",
   "manager": "레이턴 베인스",
-  "sync_version": 2,
-  "last_update": "ChatGPT 연동 준비 완료",
+  "sync_version": 4,
+  "last_update": "NEW FANTASY SAZE CUP 1R·2R 기록 반영",
   "requests": [
     {
       "id": 1,
@@ -19,12 +19,76 @@
     }
   ],
   "news": [
+    "NEW FANTASY SAZE CUP 1R · ONLY REDS FC 3-4 승리",
+    "NEW FANTASY SAZE CUP 2R · 진석 FC 4-2 승리 · 모건 로저스 해트트릭",
     "엘버턴 FC 온라인 구단 시스템 개통 준비",
     "ChatGPT ↔ GitHub 구단 데이터 연동 준비 완료"
   ],
-  "matches": [],
+  "matches": [
+    {
+      "round": "1R",
+      "home": "ONLY REDS FC",
+      "away": "Elverton FC",
+      "homeScore": 3,
+      "awayScore": 4,
+      "goals": [
+        {
+          "minute": 22,
+          "player": "브래들리 바르콜라",
+          "team": "Elverton FC"
+        },
+        {
+          "minute": 36,
+          "player": "파트리크 쉬크",
+          "team": "Elverton FC"
+        },
+        {
+          "minute": 76,
+          "player": "모건 로저스",
+          "team": "Elverton FC"
+        },
+        {
+          "minute": 86,
+          "player": "모이스 킨",
+          "team": "Elverton FC"
+        }
+      ],
+      "note": "원정 4-3 승리"
+    },
+    {
+      "round": "2R",
+      "home": "Elverton FC",
+      "away": "진석 FC",
+      "homeScore": 4,
+      "awayScore": 2,
+      "goals": [
+        {
+          "minute": 15,
+          "player": "파트리크 쉬크",
+          "team": "Elverton FC"
+        },
+        {
+          "minute": 38,
+          "player": "모건 로저스",
+          "team": "Elverton FC"
+        },
+        {
+          "minute": 54,
+          "player": "모건 로저스",
+          "team": "Elverton FC"
+        },
+        {
+          "minute": 88,
+          "player": "모건 로저스",
+          "team": "Elverton FC"
+        }
+      ],
+      "note": "홈 4-2 승리 · 모건 로저스 해트트릭"
+    }
+  ],
   "squad_status": {
     "티노_리브라멘토": "부상",
     "콜_파머": "부상"
-  }
+  },
+  "player_stats": {}
 }
