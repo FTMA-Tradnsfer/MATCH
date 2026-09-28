@@ -1,7 +1,10 @@
 {
   "club": "엘버턴 FC",
   "season": "2026/27",
-  "sync_version": 1,
+  "owner": "구단주",
+  "manager": "레이턴 베인스",
+  "sync_version": 2,
+  "last_update": "ChatGPT 연동 준비 완료",
   "requests": [
     {
       "id": 1,
@@ -9,10 +12,19 @@
       "number": 92,
       "type": "이적 요청",
       "message": "현재 출전시간으로는 성장하기 어렵다고 느끼고 있습니다. 구단주님과 제 미래에 대해 이야기하고 싶습니다.",
-      "status": "대기"
+      "status": "대기",
+      "meeting_status": "면담 가능",
+      "owner_decision": null,
+      "player_response": null
     }
   ],
   "news": [
-    "엘버턴 FC 온라인 구단 시스템 개통 준비"
-  ]
+    "엘버턴 FC 온라인 구단 시스템 개통 준비",
+    "ChatGPT ↔ GitHub 구단 데이터 연동 준비 완료"
+  ],
+  "matches": [],
+  "squad_status": {
+    "티노_리브라멘토": "부상",
+    "콜_파머": "부상"
+  }
 }
