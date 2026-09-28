@@ -16,7 +16,6 @@ button{font:inherit}.app{display:flex;min-height:100vh}.side{width:235px;positio
 .modalbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:20;align-items:center;justify-content:center}.modal{width:min(500px,90vw);background:#15121d;border:1px solid #423452;border-radius:14px;padding:20px;box-shadow:0 20px 60px #000}.modal h2{margin:0 0 4px}.modal p{color:#aaa2b8;font-size:12px;line-height:1.6}.playerstats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:15px 0}.pstat{background:#0f0d15;border:1px solid var(--line);border-radius:8px;padding:10px;text-align:center}.pstat span{display:block;color:var(--muted);font-size:9px}.pstat b{display:block;color:var(--gold);font-size:20px;margin-top:4px}.note{font-size:9px!important;color:var(--muted)!important}.close{float:right;background:none;border:0;color:#aaa;cursor:pointer;font-size:20px}
 @media(max-width:950px){.side{width:185px}.main{margin-left:185px;width:calc(100% - 185px)}.cols{grid-template-columns:1fr}.sectiongrid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:650px){.side{position:static;width:100%;height:auto}.app{display:block}.main{margin:0;width:100%;padding:18px}.stats{grid-template-columns:repeat(2,1fr)}.hero{display:block}.manager{text-align:left!important;margin-top:14px}.sectiongrid{grid-template-columns:1fr 1fr}}
- .playercard .photo{width:100%;height:150px;object-fit:cover;border-radius:10px;margin-bottom:10px;display:block}.modalphoto{width:180px;height:180px;object-fit:cover;border-radius:14px;display:block;margin:0 auto 16px;border:1px solid rgba(255,255,255,.12)}
 </style></head>
 <body>
 <div class="app">
@@ -57,28 +56,8 @@ button{font:inherit}.app{display:flex;min-height:100vh}.side{width:235px;positio
 const squad=[
 ["1","조르제 페트로비치","GK"],["2","티노 리브라멘토","DF","부상"],["3","마르크 쿠쿠렐라","DF"],["4","버질 반 다이크","DF"],["21","막심 더카위퍼르","DF"],["36","지바이로 레이드","DF"],["44","조르조 스칼비니","DF"],["84","루카 부슈코비치","DF"],["6","라이언 흐라번베르흐","MF"],["8","비티냐","MF"],["10","콜 파머","MF","부상"],["11","에베레치 에제","MF"],["38","아담 워턴","MF"],["92","키스 스미트","MF"],["7","브래들리 바르콜라","FW"],["9","파트리크 쉬크","FW"],["17","모건 로저스","FW"],["18","모이스 킨","FW"],["31","아데몰라 루크먼","FW"],["99","바주마나 투레","FW"]
 ];
-let barcolaPhoto="";
-async function loadPlayerPhotos(){
-  try{
-    const r=await fetch("assets/barcola.jpg.b64?v="+Date.now());
-    const b=(await r.text()).trim();
-    if(b) barcolaPhoto="data:image/jpeg;base64,"+b;
-  }catch(e){}
-  renderSquad();
-}
-function renderSquad(){
-  document.getElementById("squadGrid").innerHTML=squad.map(function(p){
-    var photo=(p[1]==="브래들리 바르콜라"&&barcolaPhoto)?'<img class="photo" src="'+barcolaPhoto+'" alt="브래들리 바르콜라">':"";
-    return '<div class="playercard" onclick="player(\''+p[1]+'\',\''+p[0]+'\',\''+p[2]+'\')">'+photo+'<span class="num">#'+p[0]+'</span><b>'+p[1]+'</b><small>'+p[2]+(p[3]?' · '+p[3]:'')+'</small></div>';
-  }).join("");
-}
-function player(n,num,pos){
-  var s=(window.clubData.player_stats&&window.clubData.player_stats[n])||{matches:0,goals:0,assists:0,mom:0};
-  var photo=(n==="브래들리 바르콜라"&&barcolaPhoto)?'<img class="modalphoto" src="'+barcolaPhoto+'" alt="브래들리 바르콜라">':"";
-  document.getElementById("modalTitle").textContent="#"+num+" "+n;
-  document.getElementById("modalBody").innerHTML=photo+"<p>01/02 시즌 · <b>"+pos+"</b></p><div class=\"playerstats\"><div class=\"pstat\"><span>경기</span><b>"+s.matches+"</b></div><div class=\"pstat\"><span>골</span><b>"+s.goals+"</b></div><div class=\"pstat\"><span>어시스트</span><b>"+s.assists+"</b></div><div class=\"pstat\"><span>MOM</span><b>"+s.mom+"</b></div></div><p class=\"note\">현재 등록된 경기 기록 기준</p>";
-  document.getElementById("modal").style.display="flex";
-}
+function renderSquad(){document.getElementById("squadGrid").innerHTML=squad.map(p=>'<div class="playercard" onclick="player(\''+p[1]+'\',\''+p[0]+'\',\''+p[2]+'\')"><span class="num">#'+p[0]+'</span><b>'+p[1]+'</b><small>'+p[2]+(p[3]?' · '+p[3]:'')+'</small></div>').join("")}
+function player(n,num,pos){var s=(window.clubData.player_stats&&window.clubData.player_stats[n])||{matches:0,goals:0,assists:0,mom:0};document.getElementById("modalTitle").textContent="#"+num+" "+n;document.getElementById("modalBody").innerHTML="<p>01/02 시즌 · <b>"+pos+"</b></p><div class="playerstats"><div class="pstat"><span>경기</span><b>"+s.matches+"</b></div><div class="pstat"><span>골</span><b>"+s.goals+"</b></div><div class="pstat"><span>어시스트</span><b>"+s.assists+"</b></div><div class="pstat"><span>MOM</span><b>"+s.mom+"</b></div></div><p class="note">현재 등록된 경기 기록 기준 · 실제 경기 데이터가 추가되면 누적됩니다.</p>";document.getElementById("modal").style.display="flex"}
 function closeModal(){document.getElementById("modal").style.display="none"}
 function show(id,b){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));if(b)b.classList.add("active");document.getElementById("pagetitle").textContent=b?b.textContent.replace(/ · \d+/g,"").trim():id}
 function showById(id){show(id)}
@@ -89,5 +68,5 @@ function render(d){
  const news=d.news||[];document.getElementById("newsList").innerHTML=news.map(x=>'<div class="feed"><b>'+x+'</b><small>구단 시스템 · 최근 업데이트</small></div>').join("")||'<div class="empty">새로운 소식이 없습니다.</div>';document.getElementById("homeNews").innerHTML=news.slice(0,4).map(x=>'<div class="feed"><b>'+x+'</b><small>LIVE CLUB FEED</small></div>').join("");
 }
 async function load(){try{const r=await fetch("elverton_data.json?v="+Date.now());const d=await r.json();render(d)}catch(e){}}
-loadPlayerPhotos();load();setInterval(load,10000);
+renderSquad();load();setInterval(load,10000);
 </script></body></html>
