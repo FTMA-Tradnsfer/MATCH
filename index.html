@@ -83,13 +83,18 @@ function closeModal(){
 
 function openPlayer(n,num,pos){
   const s=(clubData.player_stats&&clubData.player_stats[n])||({matches:0,goals:0,assists:0,mom:0});
-  if(n==="브래들리 바르콜라" && (!clubData.player_stats || !clubData.player_stats[n])){s.matches=2;s.goals=1;s.assists=2;s.mom=0;}
   const photo=(n==="브래들리 바르콜라"&&barcolaPhoto)?'<img class="modalphoto" src="'+barcolaPhoto+'" alt="브래들리 바르콜라">' : (n==="모이스 킨"&&keanPhoto)?'<img class="modalphoto" src="'+keanPhoto+'" alt="모이스 킨">' : "";
-  document.getElementById("modalTitle").textContent="#"+num+" "+n;
   const dob=n==="브래들리 바르콜라"?"2002.09.02":n==="모이스 킨"?"2000.02.28":"정보 없음";
-  document.getElementById("modalBody").innerHTML='<div class="modalprofile">'+photo+'<div class="modalinfo"><div class="label">생년월일</div><div class="dob">'+dob+'</div><div class="meta">등번호 <b>#'+num+'</b><br><span style="display:inline-block;margin-top:8px">포지션 <b>'+pos+'</b></span></div></div></div>'+
+  const bio=n==="브래들리 바르콜라"
+    ?"01/02 시즌에 엘버턴 FC에 합류했습니다. 구단은 바르콜라의 공격적인 재능과 성장 가능성에 큰 기대를 걸고 있으며, 팀의 공격에 새로운 활력을 불어넣어 줄 선수로 평가하고 있습니다."
+    :n==="모이스 킨"
+    ?"01/02 시즌에 엘버턴 FC에 합류했습니다. 빠른 움직임과 강한 신체 능력, 침투와 골문 앞에서의 결정력을 갖춘 공격수로 평가받으며, 구단은 최전방에서 수비 라인을 흔들고 득점 생산성을 높여줄 핵심 자원으로 기대하고 있습니다."
+    :"현재 구단의 선수단에서 중요한 역할을 맡고 있습니다.";
+  document.getElementById("modalTitle").textContent="#"+num+" "+n;
+  document.getElementById("modalBody").innerHTML=
+    '<div class="modalprofile">'+photo+'<div class="modalinfo"><div class="label">생년월일</div><div class="dob">'+dob+'</div><div class="meta">등번호 <b>#'+num+'</b><br><span style="display:inline-block;margin-top:8px">포지션 <b>'+pos+'</b></span></div></div></div>'+
     "<p>01/02 시즌 · <b>"+pos+"</b></p>"+
-    '<div class="playerbio">(n==="브래들리 바르콜라"?"01/02 시즌에 엘버턴 FC에 합류했습니다. 구단은 바르콜라의 공격적인 재능과 성장 가능성에 큰 기대를 걸고 있으며, 팀의 공격에 새로운 활력을 불어넣어 줄 선수로 평가하고 있습니다.":n==="모이스 킨"?"01/02 시즌에 엘버턴 FC에 합류했습니다. 빠른 움직임과 강한 신체 능력, 침투와 골문 앞에서의 결정력을 갖춘 공격수로 평가받으며, 구단은 최전방에서 수비 라인을 흔들고 득점 생산성을 높여줄 핵심 자원으로 기대하고 있습니다.":"현재 구단의 선수단에서 중요한 역할을 맡고 있습니다.")+'</div><div class="playerstats">'+
+    '<div class="playerbio">'+bio+'</div><div class="playerstats">'+
     '<div class="pstat"><span>경기</span><b>'+s.matches+'</b></div>'+
     '<div class="pstat"><span>골</span><b>'+s.goals+'</b></div>'+
     '<div class="pstat"><span>어시스트</span><b>'+s.assists+'</b></div>'+
