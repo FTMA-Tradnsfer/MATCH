@@ -21,13 +21,13 @@ button{font:inherit}.app{display:flex;min-height:100vh}.side{width:235px;positio
 <div class="app">
 <aside class="side"><div class="brand"><span class="mark">◆</span> <strong>ELVERTON FC</strong><small>CLUB MANAGEMENT OS</small></div>
 <div class="navtitle">CLUB</div><div class="nav">
-<button class="active" data-page="home"><i>⌂</i> 대시보드</button>
-<button data-page="squad"><i>♙</i> 선수단</button>
-<button data-page="requests"><i>✉</i> 선수 요청 <span id="badge" class="badge">1</span></button>
-<button data-page="matches"><i>◈</i> 경기 센터</button>
-<button data-page="news"><i>▣</i> 구단 소식</button>
+<button class="active" data-page="home" onclick="show('home',this)"><i>⌂</i> 대시보드</button>
+<button data-page="squad" onclick="show('squad',this)"><i>♙</i> 선수단</button>
+<button data-page="requests" onclick="show('requests',this)"><i>✉</i> 선수 요청 <span id="badge" class="badge">1</span></button>
+<button data-page="matches" onclick="show('matches',this)"><i>◈</i> 경기 센터</button>
+<button data-page="news" onclick="show('news',this)"><i>▣</i> 구단 소식</button>
 </div><div class="navtitle">MANAGEMENT</div><div class="nav">
-<button data-page="stats"><i>▥</i> 통계</button><button data-page="club"><i>⚙</i> 구단 관리</button>
+<button data-page="stats" onclick="show('stats',this)"><i>▥</i> 통계</button><button data-page="club" onclick="show('club',this)"><i>⚙</i> 구단 관리</button>
 </div></aside>
 <main class="main"><div class="top"><div><div class="eyebrow">01/02 SEASON · FANTASY LEAGUE</div><div class="title" id="pagetitle">대시보드</div></div><div class="live"><span class="dot"></span> GITHUB DATA LIVE</div></div>
 
@@ -168,9 +168,7 @@ async function load(){
 }
 
 document.addEventListener("DOMContentLoaded",function(){
-  document.querySelectorAll(".nav button[data-page]").forEach(function(btn){
-    btn.addEventListener("click",function(){show(btn.dataset.page,btn)});
-  });
+  
   const modal=document.getElementById("modal");
   if(modal)modal.addEventListener("click",function(e){if(e.target===modal)closeModal()});
   const close=document.querySelector(".modal .close");
