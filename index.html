@@ -81,7 +81,8 @@ function closeModal(){
 }
 
 function openPlayer(n,num,pos){
-  const s=(clubData.player_stats&&clubData.player_stats[n])||{matches:0,goals:0,assists:0,mom:0};
+  const s=(clubData.player_stats&&clubData.player_stats[n])||({matches:0,goals:0,assists:0,mom:0});
+  if(n==="브래들리 바르콜라" && (!clubData.player_stats || !clubData.player_stats[n])){s.matches=2;s.goals=1;s.assists=2;s.mom=0;}
   const photo=(n==="브래들리 바르콜라"&&barcolaPhoto)?'<img class="modalphoto" src="'+barcolaPhoto+'" alt="브래들리 바르콜라">':"";
   document.getElementById("modalTitle").textContent="#"+num+" "+n;
   const dob=n==="브래들리 바르콜라"?"2002.09.02":"정보 없음";
