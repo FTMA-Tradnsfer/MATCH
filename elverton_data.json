@@ -3,8 +3,8 @@
   "season": "01/02",
   "owner": "구단주",
   "manager": "레이턴 베인스",
-  "sync_version": 6,
-  "last_update": "01/02 시즌 선수 공격포인트 업데이트",
+  "sync_version": 7,
+  "last_update": "NEW FANTASY SAZE CUP 3R · 맨체스터 시티(진) 3-2 엘버턴 FC · 모건 로저스 멀티골",
   "requests": [
     {
       "id": 1,
@@ -19,10 +19,11 @@
     }
   ],
   "news": [
+    "NEW FANTASY SAZE CUP 3R · 맨체스터 시티(진) 3-2 엘버턴 FC · 로저스 멀티골",
     "NEW FANTASY SAZE CUP 1R · ONLY REDS FC 3-4 승리",
     "NEW FANTASY SAZE CUP 2R · 진석 FC 4-2 승리 · 모건 로저스 해트트릭",
     "엘버턴 FC 온라인 구단 시스템 개통 준비",
-    "ChatGPT ↔ GitHub 구단 데이터 연동 준비 완료"
+    "ChatGPT ↔ GitHub 구단 데이터 연동 완료"
   ],
   "matches": [
     {
@@ -84,6 +85,32 @@
         }
       ],
       "note": "홈 4-2 승리 · 모건 로저스 해트트릭"
+    },
+    {
+      "round": "3R",
+      "home": "맨체스터 시티(진)",
+      "away": "Elverton FC",
+      "homeScore": 3,
+      "awayScore": 2,
+      "goals": [
+        {
+          "minute": 15,
+          "player": "라스무스 호일룬",
+          "team": "맨체스터 시티(진)",
+          "assist": "케빈 데브라위너"
+        },
+        {
+          "minute": 29,
+          "player": "모건 로저스",
+          "team": "Elverton FC",
+          "assist": "파트리크 쉬크"
+        },
+        {
+          "player": "모건 로저스",
+          "team": "Elverton FC"
+        }
+      ],
+      "note": "원정 2-3 패배 · 모건 로저스 멀티골"
     }
   ],
   "squad_status": {
@@ -104,8 +131,8 @@
       "mom": 0
     },
     "모건 로저스": {
-      "matches": 2,
-      "goals": 4,
+      "matches": 3,
+      "goals": 6,
       "assists": 1,
       "mom": 0
     },
@@ -116,7 +143,7 @@
       "mom": 0
     },
     "조르제 페트로비치": {
-      "matches": 0,
+      "matches": 1,
       "goals": 0,
       "assists": 0,
       "mom": 0
@@ -134,13 +161,13 @@
       "mom": 0
     },
     "버질 반 다이크": {
-      "matches": 0,
+      "matches": 1,
       "goals": 0,
       "assists": 0,
       "mom": 0
     },
     "막심 더카위퍼르": {
-      "matches": 0,
+      "matches": 1,
       "goals": 0,
       "assists": 1,
       "mom": 0
@@ -152,25 +179,25 @@
       "mom": 0
     },
     "조르조 스칼비니": {
-      "matches": 0,
+      "matches": 1,
       "goals": 0,
       "assists": 0,
       "mom": 0
     },
     "루카 부슈코비치": {
-      "matches": 0,
+      "matches": 1,
       "goals": 0,
       "assists": 0,
       "mom": 0
     },
     "라이언 흐라번베르흐": {
-      "matches": 0,
+      "matches": 1,
       "goals": 0,
       "assists": 0,
       "mom": 0
     },
     "비티냐": {
-      "matches": 0,
+      "matches": 1,
       "goals": 0,
       "assists": 0,
       "mom": 0
