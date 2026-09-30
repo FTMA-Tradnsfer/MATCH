@@ -6,7 +6,7 @@
 <title>Elverton FC · Club AI</title>
 <style>
 *{box-sizing:border-box}html,body{margin:0;background:#08070b;color:#f7f3f8;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",Arial,sans-serif}body{min-height:100vh}
-button,input,textarea,select{font:inherit}button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:pointer}
+button,input,textarea,select{font:inherit}button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:pointer;pointer-events:auto}
 .app{max-width:760px;margin:auto;min-height:100vh;background:linear-gradient(180deg,#0d0912,#08070b);padding-bottom:34px}
 .head{padding:21px 17px 13px}.ey{font-size:10px;font-weight:900;letter-spacing:2px;color:#d9b761}.title{font-size:27px;font-weight:950;margin-top:3px}.sub{font-size:11px;color:#918898;margin-top:4px}
 .tabs{display:flex;gap:7px;padding:7px 13px 12px;overflow:auto;position:sticky;top:0;z-index:20;background:rgba(8,7,11,.95);backdrop-filter:blur(12px)}.tab{flex:0 0 auto;border:1px solid #29212f;border-radius:99px;padding:8px 12px;background:#110d15;color:#aaa0ad;font-size:10px;font-weight:900}.tab.on{background:#d9b761;color:#17110a;border-color:#d9b761}
@@ -24,10 +24,10 @@ button,input,textarea,select{font:inherit}button{touch-action:manipulation;-webk
 <div class="app">
 <header class="head"><div class="ey">ELVERTON FOOTBALL CLUB</div><div class="title">CLUB AI ROOM</div><div class="sub">01/02 · 선수단 · 코치진 · 경기 반응 · 면담 · 스카우팅</div></header>
 <nav class="tabs">
-<button class="tab on" data-tab="players">선수단</button>
-<button class="tab" data-tab="staff">코치진</button>
-<button class="tab" data-tab="match">경기 반응</button>
-<button class="tab" data-tab="inbox">구단 알림</button>
+<button type="button" class="tab on" data-tab="players">선수단</button>
+<button type="button" class="tab" data-tab="staff">코치진</button>
+<button type="button" class="tab" data-tab="match">경기 반응</button>
+<button type="button" class="tab" data-tab="inbox">구단 알림</button>
 </nav>
 
 <main id="players">
@@ -105,12 +105,13 @@ const staff=[
 {id:"fitness",name:"피지컬 코치",role:"FITNESS COACH",icon:"🏃",trait:"엄격함 · 과학적 · 선수 보호",focus:"체력, 로테이션, 훈련 강도",type:"fitness"}
 ];
 
-const squadState=JSON.parse(localStorage.getItem("elverton_squad_state")||"{}");
+const squadState=safeJSON("elverton_squad_state",{});
 players.forEach(p=>{if(!squadState[p.name])squadState[p.name]={starts:0,bench:0,last5:[],morale:72,request:false,demands:[],form:7};});
-const staffState=JSON.parse(localStorage.getItem("elverton_staff_state")||"{}");
+const staffState=safeJSON("elverton_staff_state",{});
 let cur=null,curStaff=null;
 
 function $(id){return document.getElementById(id)}
+function safeJSON(key,fallback){try{const v=localStorage.getItem(key);return v?JSON.parse(v):fallback}catch(e){localStorage.removeItem(key);return fallback}}
 function esc(s){return String(s||"").replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
 function save(){localStorage.setItem("elverton_squad_state",JSON.stringify(squadState));localStorage.setItem("elverton_staff_state",JSON.stringify(staffState))}
 function cleanName(s){return String(s||"").replace(/[#0-9]/g,"").trim()}
@@ -130,7 +131,7 @@ return p.name+"의 입장에서는 "+p.trait+" 성향답게 생각하고 있습�
 }
 
 function openPlayer(i){cur=players[i];$("players").classList.add("hidden");$("room").classList.add("show");$("ri").textContent=cur.icon;$("rn").textContent=cur.name;$("rp").textContent=cur.pos+" · "+cur.num;$("rh").textContent=cur.history;$("rt").textContent=cur.trait;$("rr").textContent=cur.rel;renderChat()}
-function renderChat(){const key="elverton_chat_"+cur.name;const arr=JSON.parse(localStorage.getItem(key)||"[]");$("chat").innerHTML=arr.length?arr.map(x=>'<div class="bubble '+(x.who==="me"?"me":"ai")+'">'+esc(x.text)+'</div>').join(""):'<div class="bubble ai">무슨 이야기든 직접 물어보세요. 경기, 출전시간, 이적, 감독, 동료에 대한 생각까지 답하겠습니다.</div>';$("chat").scrollTop=$("chat").scrollHeight}
+function renderChat(){const key="elverton_chat_"+cur.name;const arr=safeJSON(key,[]);$("chat").innerHTML=arr.length?arr.map(x=>'<div class="bubble '+(x.who==="me"?"me":"ai")+'">'+esc(x.text)+'</div>').join(""):'<div class="bubble ai">무슨 이야기든 직접 물어보세요. 경기, 출전시간, 이적, 감독, 동료에 대한 생각까지 답하겠습니다.</div>';$("chat").scrollTop=$("chat").scrollHeight}
 function sendPlayer(){const q=$("msg").value.trim();if(!q||!cur)return;const key="elverton_chat_"+cur.name;const arr=JSON.parse(localStorage.getItem(key)||"[]");arr.push({who:"me",text:q});arr.push({who:"ai",text:playerReply(cur,q)});localStorage.setItem(key,JSON.stringify(arr.slice(-30)));$("msg").value="";renderChat()}
 $("send").addEventListener("click",sendPlayer);$("msg").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendPlayer()}});$("back").addEventListener("click",()=>{$("room").classList.remove("show");$("players").classList.remove("hidden")});
 
@@ -146,14 +147,14 @@ function renderStaff(){let html="";staff.forEach((s,i)=>{const st=staffState[s.i
 
 function staffAction(i){const s=staff[i];const st=staffState[s.id]||{pending:false,reports:0};let text="",title="";if(s.type==="scout"){st.reports=(st.reports||0)+1;title="스카우팅 리포트 · "+s.name;text=s.id==="scout1"?"수석 스카우터: 현재 선수단의 중원과 측면 공격은 경쟁이 치열합니다. 영입은 즉전감 한 자리와 장기적인 유망주 한 자리를 분리해서 보는 게 좋겠습니다. 특정 선수 한 명보다 포지션 적합성·나이·역할을 함께 평가해 다음 리포트에서 후보를 제출하겠습니다.":"유망주 스카우터: 어린 선수는 당장 선발 여부만으로 평가하면 안 됩니다. 성장 가능성과 현재 출전 경로를 함께 확인하겠습니다. 구단이 원하면 다음 리포트에서 3명의 후보와 예상 역할을 제출하겠습니다.";}else if(s.type==="manager"){st.pending=true;title="감독 면담 신청";text="레인턴 베인스 감독이 구단주에게 면담을 요청했습니다. 주제: 최근 경기 운영, 선발 기준, 선수단 역할, 향후 이적시장 계획. 감독은 직접 만나 자신의 계획을 설명하겠다고 밝혔습니다.";}else{title=s.name+" 의견";text=staffOpinion(s,"최근 경기 운영");}staffState[s.id]=st;addInbox(title,text,s.type==="manager"?"danger":"");save();renderStaff();renderInbox();}
 
-function addInbox(title,text,cls){const a=JSON.parse(localStorage.getItem("elverton_inbox")||"[]");a.unshift({title:title,text:text,cls:cls||"",time:new Date().toLocaleString("ko-KR")});localStorage.setItem("elverton_inbox",JSON.stringify(a.slice(0,25)))}
+function addInbox(title,text,cls){const a=safeJSON("elverton_inbox",[]);a.unshift({title:title,text:text,cls:cls||"",time:new Date().toLocaleString("ko-KR")});localStorage.setItem("elverton_inbox",JSON.stringify(a.slice(0,25)))}
 function renderInbox(){const a=JSON.parse(localStorage.getItem("elverton_inbox")||"[]");$("inboxList").innerHTML=a.length?a.map((x,i)=>'<div class="event '+x.cls+'"><b>'+esc(x.title)+'</b><div>'+esc(x.text)+'</div><span class="muted">'+esc(x.time)+'</span>'+(x.title.includes("감독 면담")?'<button class="secondary meeting" data-i="'+i+'">면담 수락 · 진행</button>':"")+'</div>').join(""):'<div class="muted">아직 도착한 구단 알림이 없습니다.</div>';document.querySelectorAll(".meeting").forEach(b=>b.addEventListener("click",()=>acceptMeeting(Number(b.dataset.i))))}
 function acceptMeeting(i){const a=JSON.parse(localStorage.getItem("elverton_inbox")||"[]");const item=a[i];if(!item)return;item.text="면담 진행: 베인스 감독은 선발 경쟁을 유지하되 핵심 선수들의 역할을 명확히 하고 싶다고 설명했습니다. 또한 다음 이적시장에서 필요한 포지션을 구단주와 함께 결정하자고 제안했습니다.";item.title="감독 면담 · 레인턴 베인스";const st=staffState.baines||{};st.pending=false;staffState.baines=st;localStorage.setItem("elverton_inbox",JSON.stringify(a));save();renderStaff();renderInbox()}
 
 function matchReaction(){const opponent=$("opponent").value.trim(),res=$("result").value.trim(),raw=$("starters").value.trim(),ratings=$("ratings").value.trim();if(!raw){alert("선발 11명을 입력해 주세요.");return}const names=raw.split(/[,\\n]+/).map(cleanName).filter(Boolean),set=new Set(names.map(findPlayer).filter(Boolean).map(p=>p.name)),rt=resultType(res),notes=[];const ratingMap={};ratings.split(/[,\\n]+/).forEach(x=>{const m=x.match(/(.+?)\\s+(\\d+(?:\\.\\d+)?)/);if(m){const p=findPlayer(m[1]);if(p)ratingMap[p.name]=Number(m[2])}});players.forEach(p=>{const s=squadState[p.name];if(set.has(p.name)){s.starts++;s.bench=0;if(ratingMap[p.name])s.form=ratingMap[p.name]}else{s.bench++;}s.last5.push({r:rt,start:set.has(p.name),rating:ratingMap[p.name]||null});if(s.last5.length>5)s.last5.shift();let msg="";const role=roleOf(p);if(set.has(p.name)&&ratingMap[p.name]>=8)s.morale=Math.min(100,s.morale+5);if(!set.has(p.name)&&s.bench>=3&&role==="key"){s.morale=Math.max(0,s.morale-10);if(!s.demands.includes("선발 출전 요구"))s.demands.push("선발 출전 요구");msg=p.name+"이(가) 3경기 연속 선발에서 빠져 출전시간에 대한 불만을 표시했습니다."}if(!set.has(p.name)&&s.bench>=4&&(role==="key"||role==="first")){s.morale=Math.max(0,s.morale-8);if(!s.demands.includes("출전시간 보장 요구"))s.demands.push("출전시간 보장 요구");msg=p.name+"이(가) 계속 선발에서 빠지면서 출전시간 보장을 요구합니다."}if(rt==="L"&&!set.has(p.name)&&role==="key"){s.morale=Math.max(0,s.morale-4);msg=msg||p.name+"이(가) 패배 후 출전 기회를 늘려야 한다고 주장했습니다."}if(s.morale<=42&&!s.request&&(s.bench>=4||(rt==="L"&&s.bench>=3))){s.request=true;s.demands.push("이적 요청");msg=p.name+"이(가) 구단에 공식적으로 이적 요청 의사를 전달했습니다."}if(msg)notes.push(msg)});save();const title=(opponent||"상대팀")+" · "+(res||"결과");const text=notes.length?notes.join("\\n"):"즉시 발생한 강한 불만은 없습니다. 선수단은 현재 결과를 받아들이고 있습니다.";addInbox(title,text,notes.some(x=>x.includes("이적 요청"))?"danger":"");$("matchEvents").innerHTML='<div class="report"><b>'+esc(title)+'</b><p>'+esc(text).replace(/\\n/g,"<br>")+'</p></div>';renderPlayers();renderInbox();renderStaff();$("starters").value="";$("ratings").value=""}
 $("applyMatch").addEventListener("click",matchReaction);
 
-document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));t.classList.add("on");["players","staff","match","inbox"].forEach(id=>$(id).classList.toggle("hidden",id!==t.dataset.tab));$("room").classList.remove("show");if(t.dataset.tab==="staff")renderStaff();if(t.dataset.tab==="inbox")renderInbox()}));
+document.addEventListener("click",function(ev){const t=ev.target.closest(".tab");if(t){document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));t.classList.add("on");["players","staff","match","inbox"].forEach(id=>$(id).classList.toggle("hidden",id!==t.dataset.tab));$("room").classList.remove("show");if(t.dataset.tab==="staff")renderStaff();if(t.dataset.tab==="inbox")renderInbox();return;} });
 
 renderPlayers();renderCaptains();renderStaff();renderInbox();
 </script>
