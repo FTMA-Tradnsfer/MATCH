@@ -32,49 +32,53 @@ button,input,textarea{font:inherit}button{touch-action:manipulation;-webkit-tap-
 </div>
 <script>
 const players=[{"name":"조르제 페트로비치","pos":"GK","num":"#1","icon":"🧤","trait":"침착함 · 자신감","rel":"주장단과 신뢰 관계 · 경기 출전 의지","history":"이전 클럽 → Elverton"},{"name":"콘스탄티노스 촐라키스","pos":"GK","num":"#13","icon":"🧤","trait":"침착함 · 성장 지향","rel":"페트로비치와 경쟁 관계 · 출전 기회 중요","history":"이전 클럽 → Elverton"},{"name":"마르크 쿠쿠렐라","pos":"DF","num":"#3","icon":"🛡️","trait":"활동적 · 경쟁심","rel":"수비진 동료들과 긴밀 · 팀 전술 관심","history":"이전 클럽 → Elverton"},{"name":"버질 반 다이크","pos":"DF","num":"#4","icon":"🧠","trait":"리더십 · 경험 · 높은 프로의식","rel":"주장 · 베인스 감독 신뢰도 높음","history":"Groningen → Celtic → Southampton → Liverpool (2018–현재) → Elverton"},{"name":"티노 리브라멘토","pos":"DF","num":"#2","icon":"⚡","trait":"공격적 · 자신감","rel":"측면 경쟁자들과 경쟁적 관계","history":"이전 클럽 → Elverton"},{"name":"루카 부슈코비치","pos":"DF","num":"#84","icon":"🧱","trait":"야망 · 성장 지향","rel":"젊은 수비진과 친밀 · 출전 기회 중요","history":"이전 클럽 → Elverton"},{"name":"조르조 스칼비니","pos":"DF","num":"#44","icon":"🧱","trait":"침착함 · 전술 이해","rel":"반 다이크에게서 배우려는 관계","history":"이전 클럽 → Elverton"},{"name":"막심 더카위퍼르","pos":"DF","num":"#21","icon":"🛡️","trait":"성실함 · 적응력","rel":"수비진 로테이션 경쟁","history":"이전 클럽 → Elverton"},{"name":"제이든 보글","pos":"DF","num":"#27","icon":"⚡","trait":"직선적 · 투지","rel":"측면 수비 경쟁 · 출전 의지 강함","history":"이전 클럽 → Elverton"},{"name":"스벤 보트만","pos":"DF","num":"#5","icon":"🧱","trait":"강인함 · 집중력","rel":"센터백 경쟁자들과 경쟁적 관계","history":"이전 클럽 → Elverton"},{"name":"라이언 흐라번베르흐","pos":"MF","num":"#6","icon":"🚀","trait":"자신감 · 전진성","rel":"중원 핵심 동료들과 전술적 신뢰","history":"이전 클럽 → Elverton"},{"name":"알렉시스 맥 알리스터","pos":"MF","num":"#8","icon":"🎯","trait":"지능적 · 냉정함 · 전술적","rel":"흐라번베르흐와 중원 호흡 · 팀 전술 중시","history":"Argentinos Juniors → Brighton → Liverpool → Elverton"},{"name":"아담 워턴","pos":"MF","num":"#38","icon":"🧠","trait":"성장형 · 냉정함","rel":"중원 경쟁자들과 좋은 관계 · 성장 욕구","history":"이전 클럽 → Elverton"},{"name":"키스 스미트","pos":"MF","num":"#92","icon":"💬","trait":"사교적 · 긍정적","rel":"라커룸 분위기 메이커","history":"이전 클럽 → Elverton"},{"name":"에베레치 에제","pos":"MF","num":"#11","icon":"✨","trait":"자유로움 · 창의적","rel":"공격진과 연계 중시","history":"이전 클럽 → Elverton"},{"name":"은골로 캉테","pos":"MF","num":"#7","icon":"🛡️","trait":"성실함 · 겸손함 · 팀 지향","rel":"베테랑으로서 중원 조언자 역할","history":"Boulogne → Caen → Leicester City → Chelsea → Al-Ittihad → Elverton"},{"name":"브래들리 바르콜라","pos":"FW","num":"#7","icon":"👥","trait":"사교적 · 적응력 · 팀 지향","rel":"공격진 핵심 · 새로운 선수 적응 지원","history":"AS Buers → Lyon Academy → Lyon (2021–2023) → Paris Saint-Germain (2023–2026) → Liverpool (2026–현재) → Elverton"},{"name":"파트리크 쉬크","pos":"FW","num":"#9","icon":"🎯","trait":"침착함 · 결정력","rel":"부주장 · 공격진 리더","history":"Sparta Prague → Sampdoria → Roma → RB Leipzig → Bayer Leverkusen → Elverton"},{"name":"모건 로저스","pos":"FW","num":"#17","icon":"🔥","trait":"자신감 · 직선적","rel":"바르콜라와 공격진 경쟁 · 출전 의지 강함","history":"Manchester City Academy → Middlesbrough → Aston Villa → Elverton"},{"name":"모이스 킨","pos":"FW","num":"#18","icon":"🔥","trait":"자신감 · 승부욕","rel":"스트라이커 경쟁자들과 경쟁적","history":"Juventus → Everton → PSG → Juventus → Fiorentina → Juventus → Elverton"},{"name":"아데몰라 루크먼","pos":"FW","num":"#31","icon":"⚡","trait":"적극적 · 승부욕","rel":"측면 공격수들과 경쟁 · 득점 기여 중시","history":"Charlton Athletic → Everton → RB Leipzig → Atalanta → Elverton"},{"name":"바주마나 투레","pos":"FW","num":"#99","icon":"💪","trait":"투지 · 에너지","rel":"젊은 공격진과 친밀 · 출전 기회 중요","history":"이전 클럽 → Elverton"},{"name":"안토니오 누사","pos":"FW","num":"#14","icon":"⚡","trait":"대담함 · 창의적 · 성장 지향","rel":"젊은 공격진과 친밀 · 성장과 출전시간 중시","history":"Club Brugge → RB Leipzig → Elverton"},{"name":"콜 파머","pos":"MF","num":"#10","icon":"✨","trait":"야망 · 자신감 · 성장 지향","rel":"공격진 핵심 · 주장단과 적극적 소통","history":"Manchester City Academy → Manchester City (2020–2023) → Chelsea (2023–현재) → Elverton"},{"name":"아니스 하지 무사","pos":"FW","num":"#77","icon":"✨","trait":"기술적 · 창의적 · 적극적","rel":"공격진 로테이션 경쟁 · 출전 기회 중요","history":"이전 클럽 → Elverton"}];
-const captainNames=["버질 반 다이크","콜 파머","브래들리 바르콜라"];
+const captainNames=["버질 반 다이크","파트리크 쉬크"];
 let cur=null;
 function $(id){return document.getElementById(id)}
-function esc(s){return String(s).replace(/[&<>"']/g,x=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[x]))}
-function opinion(p){
-const n=p.name;
-if(n==="버질 반 다이크")return "방출 명단은 최근 경기력만 보고 결정하면 안 됩니다. 역할과 라커룸 영향력, 팀의 장기적인 방향까지 함께 봐야 합니다. 중요한 결정이라면 선수들과도 충분히 소통했으면 합니다.";
-if(n==="콜 파머")return "선수단을 정리하는 건 프로젝트의 방향과 연결된 문제라고 생각합니다. 누가 남고 떠나는지보다 왜 그런 결정을 하는지가 중요해요. 저도 제 역할과 팀의 계획을 명확히 알고 싶습니다.";
-return "새로운 선수가 오고 기존 선수가 떠나는 건 축구에서 자연스러운 일입니다. 그래도 라커룸 분위기와 어린 선수들의 적응까지 생각해서 결정했으면 좋겠습니다.";
-}
-function renderList(){
-Array.from(document.querySelectorAll(".card[data-i]")).forEach(b=>{
-  if(!b.dataset.bound){b.dataset.bound="1";b.addEventListener("click",()=>open(+b.dataset.i));}
-});
-}
-function renderCaptains(){
-Array.from(document.querySelectorAll(".captain-open")).forEach(b=>{
-  if(!b.dataset.bound){b.dataset.bound="1";b.addEventListener("click",()=>open(+b.dataset.i));}
-});
-}
-function key(){return "elverton_ai_"+cur.name}
+function esc(s){return String(s).replace(/[&<>"']/g,x=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[x]))}
 function greeting(){
-return "구단주님, "+(cur.name==="버질 반 다이크"?"선수단 운영과 팀의 방향에 대해 솔직하게 이야기하겠습니다.":cur.name==="콜 파머"?"제 역할, 프로젝트, 이적과 관련된 이야기까지 솔직하게 답할게요.":"팀 분위기나 출전, 이적에 관한 이야기라면 제 입장에서 솔직하게 말하겠습니다.");
+const greetings={
+"버질 반 다이크":"무슨 이야기인지 들어보죠. 팀 얘기라면 편하게 말해도 됩니다. 제가 생각하는 건 솔직하게 말씀드릴게요.",
+"파트리크 쉬크":"네, 말씀하세요. 경기나 출전 문제든 팀 얘기든 제 생각은 솔직하게 말하겠습니다.",
+"콜 파머":"뭐가 궁금한데요? 경기 얘기든 팀 얘기든 편하게 물어보세요.",
+"브래들리 바르콜라":"네, 물어보세요. 팀 얘기라면 저도 솔직하게 말할게요.",
+"모건 로저스":"말씀하세요. 저는 제 생각 확실하게 얘기할게요.",
+"모이스 킨":"네. 궁금한 거 있으면 바로 물어보세요. 돌려서 말하는 건 별로 안 좋아합니다.",
+"에베레치 에제":"네, 얘기해보죠. 축구 얘기라면 뭐든 편하게 말할 수 있어요.",
+"은골로 캉테":"네, 말씀하세요. 팀에 도움이 되는 방향으로 차분하게 이야기하고 싶습니다."
+};
+return greetings[cur.name]||"네, 말씀하세요. 제 입장에서 솔직하게 이야기해볼게요.";
 }
-function open(i){
-cur=players[i];$("main").classList.add("hidden");$("room").classList.add("show");
-$("ri").textContent=cur.icon;$("rn").textContent=cur.name;$("rp").textContent=cur.pos+" · "+cur.num;
-$("rh").textContent=cur.history;$("rt").textContent=cur.trait;$("rr").textContent=cur.rel;renderChat();
+function open(i){cur=players[i];$("main").classList.add("hidden");$("room").classList.add("show");$("ri").textContent=cur.icon;$("rn").textContent=cur.name;$("rp").textContent=cur.pos+" · "+cur.num;$("rh").textContent=cur.history;$("rt").textContent=cur.trait;$("rr").textContent=cur.rel;renderChat()}
+function renderChat(){const a=JSON.parse(localStorage.getItem(key())||"[]");$("chat").innerHTML=a.length?a.map(x=>'<div class="bubble '+(x.role==="u"?"me":"ai")+'">'+esc(x.text)+'</div>').join(""):'<div class="bubble ai">'+esc(greeting())+'</div>';$('chat').scrollTop=$('chat').scrollHeight}
+function key(){return "elverton_ai_"+cur.name}
+function naturalReply(q){
+const x=q.toLowerCase(); const n=cur.name;
+const style={
+"버질 반 다이크":{open:"저라면",end:"결국 팀에 도움이 되는 선택이어야 한다고 봅니다."},
+"파트리크 쉬크":{open:"제 입장에서는",end:"저는 그 부분을 중요하게 생각합니다."},
+"콜 파머":{open:"저는",end:"그건 저한테도 꽤 중요한 부분이에요."},
+"브래들리 바르콜라":{open:"저는",end:"팀 분위기도 같이 봐야 한다고 생각해요."},
+"모건 로저스":{open:"저는 솔직히",end:"저는 경쟁하는 걸 좋아해서 제 자리도 직접 만들어가고 싶어요."},
+"모이스 킨":{open:"저라면",end:"저는 뛰는 게 제일 중요합니다."},
+"에베레치 에제":{open:"저는",end:"결국 제가 경기장에서 보여드리면 된다고 생각해요."},
+"은골로 캉테":{open:"제 생각에는",end:"팀을 위해서 차분하게 결정하는 게 좋다고 생각합니다."},
+"라이언 흐라번베르흐":{open:"저는",end:"저는 제 능력을 경기장에서 보여주고 싶어요."},
+"알렉시스 맥 알리스터":{open:"저는 상황을 먼저 봐야 한다고 생각해요.",end:"감정적으로 결정할 문제는 아니라고 봅니다."},
+"파트리크 쉬크":{open:"제 입장에서는",end:"결국 제가 할 일은 경기장에서 보여주는 거죠."}
+};
+const s=style[n]||{open:"저는",end:"저한테 중요한 건 제 역할과 팀의 방향입니다."};
+if(/이적|제의|오퍼|떠나|잔류|transfer/.test(x)){
+const t={"버질 반 다이크":"이적 제안이 온다고 바로 떠날 생각은 없습니다. 먼저 제가 팀에서 어떤 역할을 맡고 있는지, 베인스 감독이 저를 어떻게 생각하는지부터 보겠습니다. 나이와 커리어를 생각하면 선택은 신중해야죠.","파트리크 쉬크":"제의를 받는 것 자체보다 제가 여기서 어떤 역할을 맡고 있는지가 중요합니다. 지금 팀에서 중요한 역할을 하고 있다면 쉽게 떠날 이유는 없다고 봐요.","콜 파머":"좋은 제안이 와도 바로 결정하진 않을 거예요. 제가 팀에서 어떤 역할을 맡고 있는지, 프로젝트가 어디로 가는지가 더 중요합니다.","브래들리 바르콜라":"저는 지금 여기서 뛰는 게 좋습니다. 제안이 오면 들어보긴 하겠지만, 팀에서 계속 성장할 수 있는지도 같이 볼 것 같아요."};
+return t[n]||s.open+" 다른 팀이 관심을 보인다고 해서 바로 움직이고 싶지는 않습니다. 출전 기회와 제 역할, 팀의 방향을 먼저 보고 결정할 것 같아요. "+s.end}
+if(/방출|명단|내보내|정리/.test(x)) return n==="모이스 킨"?"방출 명단이요? 이유부터 듣겠습니다. 제가 경기장에서 보여줄 기회가 있다면 그렇게 쉽게 포기할 생각은 없어요.":"저를 정리하려는 이유가 뭔지는 먼저 듣고 싶습니다. 불만이 생기더라도 대화부터 해보고 싶어요. "+s.end;
+if(/출전|선발|벤치|경기/.test(x)) return n==="버질 반 다이크"?"당연히 뛰고 싶죠. 다만 제가 감독의 선택을 존중하지 않는다는 뜻은 아닙니다. 훈련에서 제 역할을 하고, 경기에 들어가면 팀을 돕는 게 제 일입니다.":n==="콜 파머"?"저는 경기에 나가고 싶어요. 벤치에 앉아 있는 걸 좋아하는 선수는 없잖아요. 결국 제가 보여줘야 선발도 따라온다고 생각합니다.":"저는 뛰고 싶습니다. 출전 기회가 오면 제 장점을 보여드릴 준비가 되어 있어요. "+s.end;
+if(/재계약|계약|연봉/.test(x)) return s.open+" 계약은 돈만 보고 결정할 문제는 아니라고 생각합니다. 제 역할과 구단이 저를 얼마나 중요하게 생각하는지도 같이 보고 이야기할게요. "+s.end;
+if(/감독|베인스/.test(x)) return n==="버질 반 다이크"?"베인스 감독과는 신뢰가 중요합니다. 제가 전술적으로 이해가 안 되는 부분이 있으면 직접 물어보고, 감독도 제 의견을 들을 거라고 생각합니다.":"감독님이 저에게 원하는 게 뭔지 명확하면 좋겠습니다. 그걸 알면 경기장에서 훨씬 편하게 제 플레이를 할 수 있어요.";
+if(/불만|화나|불편|싫/.test(x)) return "물론 저도 사람이라 불만이 생길 수는 있습니다. 그런데 바로 밖으로 꺼내기보다는 먼저 당사자와 이야기하는 편이 낫다고 생각해요. "+s.end;
+return n==="버질 반 다이크"?"제 생각을 묻는 거라면 솔직하게 말씀드릴게요. 저는 팀 안에서 제가 맡은 역할을 중요하게 생각합니다. 문제가 있다면 피하기보다 직접 이야기해서 해결하는 게 맞다고 봅니다.":n==="모이스 킨"?"저는 제 생각이 있으면 말하는 편입니다. 팀을 위해 필요한 얘기라면 더 그렇고요. 결국 중요한 건 경기장에서 결과를 만드는 거라고 생각합니다.":n==="콜 파머"?"저는 제 생각을 숨기는 편은 아니에요. 팀의 방향이 명확하고 제가 제 역할을 할 수 있다면 그게 가장 좋습니다.":"저는 제 입장에서 솔직하게 말할게요. 팀 상황도 중요하지만 제가 어떤 역할을 맡고 있는지도 중요합니다. "+s.end;
 }
-function renderChat(){
-const a=JSON.parse(localStorage.getItem(key())||"[]");$("chat").innerHTML=a.length?a.map(x=>'<div class="bubble '+(x.role==="u"?"me":"ai")+'">'+esc(x.text)+'</div>').join(""):'<div class="bubble ai">'+esc(greeting())+'</div>';
-$("chat").scrollTop=$("chat").scrollHeight;
-}
-function reply(q){
-const x=q.toLowerCase();
-if(/이적|제의|오퍼|떠나|잔류|transfer/.test(x))return cur.name+"의 입장에서는 이적 제안이 오면 조건과 제 역할을 먼저 살펴볼 것 같습니다. 단순히 다른 팀의 이름만 보고 결정하기보다 출전 기회와 프로젝트, 감독과의 신뢰를 함께 생각하겠습니다.";
-if(/방출|명단|내보내|정리/.test(x))return "방출 명단에 들어간다면 이유를 먼저 듣고 싶습니다. 지금까지 팀에 어떤 기여를 했는지와 앞으로의 역할을 기준으로 이야기해보고 싶어요.";
-if(/출전|선발|벤치|경기/.test(x))return "당연히 경기에 나서고 싶은 마음은 있습니다. 하지만 감독의 선택을 존중하면서 훈련에서 제 역할을 증명하겠습니다.";
-if(/재계약|계약|연봉/.test(x))return "계약 문제는 구단의 계획과 제 역할을 함께 보고 판단해야 합니다. 지금 당장 결론을 내리기보다는 제 입장에서 중요한 조건을 확인하고 싶습니다.";
-if(/감독|베인스/.test(x))return "베인스 감독과는 전술과 제 역할에 대해 계속 이야기하고 싶습니다. 감독의 계획이 명확할수록 선수도 더 안정적으로 준비할 수 있습니다.";
-if(/불만|화나|불편|싫/.test(x))return "저도 선수로서 불만이 생길 수는 있지만 바로 결론을 내리지는 않겠습니다. 먼저 구단과 대화하고 제가 원하는 부분을 설명하겠습니다.";
-return "그 질문에 대해서는 제 입장에서 생각해보면, 팀의 현재 상황과 제 역할을 같이 봐야 할 것 같습니다. "+cur.trait+" 성향인 만큼 제 의견은 분명히 전달하겠습니다.";
-}
+function reply(q){return naturalReply(q)}
 function send(){
 const q=$("msg").value.trim();if(!q)return;$("msg").value="";
 const a=JSON.parse(localStorage.getItem(key())||"[]");a.push({role:"u",text:q},{role:"a",text:reply(q)});localStorage.setItem(key(),JSON.stringify(a.slice(-80)));renderChat();
