@@ -173,7 +173,37 @@ function openStaffChat(s,topic,emergency=false){curStaff=s;$("staff").classList.
 
 function renderStaffChat(key){const arr=safeJSON(key,[]);$("staffChat").innerHTML=arr.map(x=>'<div class="bubble '+(x.who==="me"?"me":"ai")+'">'+esc(x.text)+'</div>').join("");$("staffChat").scrollTop=$("staffChat").scrollHeight;$("staffMsg").dataset.key=key;}
 
-function sendStaffMessage(){const q=$("staffMsg").value.trim();if(!q)return;const key=$("staffMsg").dataset.key;if(!key)return;const arr=safeJSON(key,[]);arr.push({who:"me",text:q});let reply="";if(key==="elverton_emergency_chat")reply="레이턴 베인스: 확인했습니다. 코치진과 주장단의 의견을 종합해서 다음 훈련·선발·선수단 운영에 반영하겠습니다.";else reply=curStaff.name+": 말씀하신 내용을 면담 주제로 받아들이겠습니다. "+staffOpinion(curStaff,q);arr.push({who:"ai",text:reply});localStorage.setItem(key,JSON.stringify(arr.slice(-40)));$("staffMsg").value="";renderStaffChat(key);}
+function emergencyReply(q){
+const low=q.toLowerCase();
+if(/파머|팔머|방출|매각|이적/.test(low)){
+return [
+"레이턴 베인스: 콜 파머의 방출 문제는 선수 가치만 보고 결정할 사안이 아닙니다. 현재 역할, 전술적 중요도, 선수 본인의 의사까지 같이 보겠습니다.",
+"팀 케이힐: 전술적으로는 파머가 2선과 공격 전개에서 맡을 수 있는 역할이 있습니다. 방출한다면 대체할 창의성이 필요합니다.",
+"시오 월콧: 시장 관점에서는 매각을 검토할 수 있지만, 먼저 대체 자원과 예상 이적료를 확인한 뒤 결정하는 게 맞습니다.",
+"버질 반 다이크: 선수단 입장에서는 핵심 선수가 빠질 경우 라커룸과 경기력에 어떤 영향이 있을지도 생각해야 합니다."
+];
+}
+if(/선발|라인업|주전|출전/.test(low)){
+return [
+"레이턴 베인스: 선발은 경기 상대와 컨디션을 기준으로 결정하겠습니다.",
+"팀 케이힐: 훈련 상태와 최근 경기력을 함께 놓고 선발 경쟁을 보겠습니다.",
+"파트리크 쉬크: 선수들은 출전시간에 민감합니다. 기준을 명확하게 알려주는 게 좋겠습니다."
+];
+}
+if(/훈련|전술|포메이션/.test(low)){
+return [
+"레이턴 베인스: 전술의 최종 결정은 제가 책임지겠습니다.",
+"필립 네빌: 수비 간격과 중원 압박부터 점검할 필요가 있습니다.",
+"게리 리네커: 공격에서는 스트라이커와 2선의 움직임을 더 구체적으로 맞춰야 합니다."
+];
+}
+return [
+"레이턴 베인스: 의견을 확인했습니다. 이 문제는 코치진과 주장단의 의견을 함께 듣고 결정하겠습니다.",
+"팀 케이힐: 선수단 운영 측면에서도 현재 상황을 검토해보겠습니다.",
+"버질 반 다이크: 주장단에서도 선수들의 분위기와 반응을 확인해보겠습니다."
+];
+}
+function sendStaffMessage(){const q=$("staffMsg").value.trim();if(!q)return;const key=$("staffMsg").dataset.key;if(!key)return;const arr=safeJSON(key,[]);arr.push({who:"me",text:q});if(key==="elverton_emergency_chat"){emergencyReply(q).forEach(text=>arr.push({who:"ai",text}));}else{arr.push({who:"ai",text:curStaff.name+": 말씀하신 내용을 면담 주제로 받아들이겠습니다. "+staffOpinion(curStaff,q)});}localStorage.setItem(key,JSON.stringify(arr.slice(-40)));$("staffMsg").value="";renderStaffChat(key);}
 
 function staffRequestMeeting(i){const s=staff[i];const st=staffState[s.id]||{};st.pending=true;st.lastTopic=staffMeetingTopic(s);staffState[s.id]=st;save();openStaffChat(s,st.lastTopic,false);renderStaff();}
 
@@ -181,7 +211,7 @@ function meetingDecision(kind,target){const r=Math.random();if(kind==="player")r
 function ownerMeetingStaff(i){const s=staff[i];const d=meetingDecision("staff",s);if(d.ok){staffState[s.id]=staffState[s.id]||{};staffState[s.id].pending=false;save();openStaffChat(s,"구단주님이 요청하신 면담입니다. 현재 맡은 역할과 구단 운영에 대해 먼저 말씀드리겠습니다.",false);}else{addInbox("면담 요청 보류 · "+s.name,d.text,"");renderInbox();}}
 function ownerMeetingPlayer(){if(!cur)return;const d=meetingDecision("player",cur);if(d.ok){const topic=cur.name+"과(와) 구단주 간 면담이 수락되었습니다. 선수의 역할과 출전시간에 대해 새 대화에서 시작합니다.";const key="elverton_player_meeting_"+cur.name;curPlayerChatKey=key;localStorage.setItem(key,JSON.stringify([{who:"ai",text:cur.name+": 면담 요청을 받아들였습니다. "+(squadState[cur.name].request?"출전시간과 향후 역할부터 이야기하고 싶습니다.":"현재 제 역할과 팀에서의 계획부터 이야기하고 싶습니다.")}]));$("players").classList.add("hidden");$("room").classList.add("show");renderChat();}else addInbox("면담 요청 보류 · "+cur.name,d.text,"");renderInbox();}
 function playerMeetingRequest(p){if(!p)return;const topic=p.name+"이(가) 먼저 이야기하고 싶은 주제를 정리했습니다.";const key="elverton_chat_"+p.name;const arr=safeJSON(key,[]);arr.push({who:"ai",text:"📩 면담 요청: "+(squadState[p.name].request?"출전시간과 역할 보장에 대한 논의가 필요합니다.":"현재 역할과 향후 출전 계획에 대해 구단주님과 이야기하고 싶습니다.")});localStorage.setItem(key,JSON.stringify(arr.slice(-30)));renderChat();}
-function emergencyMeeting(){const pseudo=staff[0];openStaffChat(pseudo,"코치진과 주장단 전원이 참석하는 긴급 운영 회의",true);}
+function emergencyMeeting(){const pseudo=staff[0];const key="elverton_emergency_chat";const existing=safeJSON(key,[]);if(existing.length&&existing.some(x=>x.text&&x.text.includes("확인했습니다. 코치진과 주장단의 의견을 종합"))){localStorage.removeItem(key);}openStaffChat(pseudo,"코치진과 주장단 전원이 참석하는 긴급 운영 회의",true);}
 $("emergencyMeeting").addEventListener("click",emergencyMeeting);
 $("staffSend").addEventListener("click",sendStaffMessage);$("staffMsg").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendStaffMessage()}});
 $("staffBack").addEventListener("click",()=>{$("staffRoom").classList.remove("show");$("staff").classList.remove("hidden");renderStaff();});
