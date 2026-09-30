@@ -139,20 +139,38 @@ function findPlayer(s){s=cleanName(s);return players.find(p=>p.name===s)||player
 function resultType(r){r=String(r||"").toLowerCase();if(/승|win/.test(r))return"W";if(/패|loss/.test(r))return"L";return"D"}
 function roleOf(p){if(["버질 반 다이크","파트리크 쉬크","콜 파머","브래들리 바르콜라","알렉시스 맥 알리스터","라이언 흐라번베르흐","모이스 킨"].includes(p.name))return"key";if(["루카 부슈코비치","안토니오 누사","아담 워턴","콘스탄티노스 촐라키스"].includes(p.name))return"prospect";return"first"}
 
-function playerReply(p,q){
-const s=squadState[p.name];const low=q.toLowerCase();
-if(s.request&&/이적|떠나|불만|출전|벤치/.test(low))return"저는 이미 구단에 제 의사를 전달했습니다. 출전 기회가 필요합니다. 역할이 계속 보장되지 않는다면 이적할 수 있는 길을 열어달라고 요청했습니다.";
-if(/이적|떠나/.test(low)){if(["버질 반 다이크","콜 파머"].includes(p.name))return"지금 당장 떠날 생각은 없습니다. 제가 이 팀에서 맡은 역할이 있고, 이 팀이 만들어지는 과정에 책임이 있다고 생각합니다.";return s.morale<55?"솔직히 출전 상황이 계속 이렇다면 다른 선택지도 생각해야 합니다. 저는 경기장에서 제 가치를 보여주고 싶습니다.":"지금은 팀에 집중하고 있습니다. 다만 제 역할과 출전시간은 중요합니다. 그 부분이 계속 맞지 않으면 그때는 생각해보겠습니다."}
-if(/선발|주전|출전|벤치/.test(low)){if(s.bench>=3)return"저는 제 출전시간에 만족하지 못하고 있습니다. 계속 선발에서 빠진다면 감독님과 직접 이야기해서 제 역할을 확인하겠습니다.";return["파트리크 쉬크","모이스 킨","콜 파머"].includes(p.name)?"저는 선발을 원합니다. 중요한 경기에서 제가 팀에 기여할 수 있다고 생각하고, 경쟁은 경기장에서 받아들이겠습니다.":"경쟁은 당연합니다. 제가 해야 할 건 훈련과 경기에서 제 자리를 증명하는 것입니다."}
-if(/캉테|흐라번베르흐|맥 알리스터/.test(low)&&/경쟁|제치|주전/.test(low))return p.name==="알렉시스 맥 알리스터"?"자신 있습니다. 좋은 선수들이 있다는 건 알지만 저는 벤치에 앉으려고 온 게 아닙니다. 경쟁은 경기장에서 하면 됩니다.":p.name==="라이언 흐라번베르흐"?"쉽지는 않겠지만 제 자리를 지킬 생각입니다. 누가 왔다는 이유만으로 물러나지는 않겠습니다.":"경쟁은 받아들입니다. 누가 뛰어야 하는지는 감독님이 결정하겠지만 저는 제 기회를 놓치지 않을 겁니다.";
-if(/감독|베인스/.test(low))return p.name==="버질 반 다이크"?"감독님과는 팀의 방향과 라커룸에 대해 자주 이야기합니다. 중요한 건 결정이 내려지면 선수들이 따라갈 수 있게 만드는 겁니다.":"감독님 판단을 존중합니다. 다만 제 역할에 대한 생각은 분명하게 전달하겠습니다.";
-if(/분위기|팀/.test(low))return p.name==="키스 스미트"?"라커룸 분위기는 괜찮습니다. 다만 출전시간에 대한 불만이 몇 명에게 쌓이면 제가 중간에서 분위기를 풀어야 할 것 같습니다.":"지금은 팀을 먼저 생각하고 있습니다. 결과가 좋으면 분위기도 자연스럽게 좋아집니다.";
-return p.name+"의 입장에서는 "+p.trait+" 성향답게 생각하고 있습니다. 제 역할과 현재 팀 상황을 같이 보고 판단하겠습니다.";
+function lastMessages(key,n=8){return safeJSON(key,[]).slice(-n);}
+function lastUserMessage(key){const a=lastMessages(key,12).filter(x=>x.who==="me");return a.length?a[a.length-1].text:"";}
+function mentionedPlayer(text){return players.find(p=>text.includes(p.name))||null;}
+function naturalShortReply(p,q,arr){
+const t=q.trim(), prev=arr.length>=2?arr[arr.length-2].text:"";
+if(/^(야|야\s*|저기|잠깐)$/.test(t))return"왜?";
+if(/^(왜|뭔데|뭐야)$/.test(t))return prev&&prev.length<30?"응, 무슨 얘기하려고?":"왜, 무슨 일 있어?";
+if(/^(응|어|ㅇㅇ|그래|그래\?|진짜\?|흠)$/.test(t))return"응. 그래서?";
+if(/^(아니|ㄴㄴ)$/.test(t))return"아니야? 그럼 뭐가 다른데?";
+if(/^(그게 아니라|아니 그게 아니라)$/.test(t))return"아, 그게 아니야? 뭐가 다른데?";
+if(/^(그래서\?|그럼\?|근데\?)$/.test(t))return"그러니까 내가 말하고 싶은 건 이거야.";
+if(/^(알겠어|오케이|ㅇㅋ)$/.test(t))return"응.";
+if(/^(고마워|감사)$/.test(t))return"별말씀을.";
+return null;
+}
+function playerReply(p,q,key){
+const s=squadState[p.name],low=q.toLowerCase(),arr=lastMessages(key||("elverton_chat_"+p.name),10);
+const short=naturalShortReply(p,q,arr);if(short)return short;
+const recent=arr.filter(x=>x.who==="me").map(x=>x.text).join(" ");
+const context=recent+" "+q;
+const other=mentionedPlayer(context);
+if(/이적|떠나|팔아|매각/.test(low)){if(["버질 반 다이크","콜 파머"].includes(p.name))return p.name+"을(를) 지금 보내는 건 저는 생각해보고 싶습니다. 저는 아직 여기서 할 일이 있다고 생각해요.";return s.morale<55?"솔직히 출전 상황이 계속 이러면 다른 선택지도 생각하게 됩니다.":"지금 당장은 팀에 집중하고 있어요. 다만 제 역할이 계속 줄어드는 건 원하지 않습니다."}
+if(/선발|주전|출전|벤치/.test(low)){if(s.bench>=3)return"솔직히 답답합니다. 계속 벤치에 있으면 저도 왜 그런지 감독님한테 물어볼 수밖에 없어요.";return["파트리크 쉬크","모이스 킨","콜 파머"].includes(p.name)?"저는 선발로 뛰고 싶어요. 중요한 경기일수록 제가 할 수 있는 게 있다고 생각합니다.":"경쟁은 괜찮아요. 대신 기회가 왔을 때 제가 보여줘야죠."}
+if(/감독|베인스/.test(low))return p.name==="버질 반 다이크"?"베인스 감독님하고는 자주 이야기해요. 결정이 내려지면 선수들이 따라갈 수 있게 하는 게 중요하죠.":"감독님 판단은 존중해요. 그래도 제 생각은 직접 말씀드릴 겁니다.";
+if(/분위기|팀/.test(low))return p.name==="키스 스미트"?"괜찮아요. 다만 출전시간 때문에 불만 있는 선수들은 조금 있어요.":"지금은 나쁘지 않아요. 경기 결과가 계속 좋으면 더 좋아질 거고요.";
+if(other&&other.name!==p.name&&/동료|같이|조합|경쟁/.test(low))return other.name+"은(는) 좋은 선수예요. 같이 뛰면 서로 장점을 살릴 수 있다고 생각합니다.";
+return p.name+"은(는) "+p.trait+" 성향이라 그런 부분을 중요하게 생각해요. "+(s.morale<55?"요즘은 솔직히 조금 답답한 상태예요.":"지금은 팀에서 제 역할을 하는 데 집중하고 있어요.");
 }
 
 function openPlayer(i){cur=players[i];curPlayerChatKey=null;$("players").classList.add("hidden");$("room").classList.add("show");$("ri").textContent=cur.icon;$("rn").textContent=cur.name;$("rp").textContent=cur.pos+" · "+cur.num;$("rh").textContent=cur.history;$("rt").textContent=cur.trait;$("rr").textContent=cur.rel;renderChat()}
 function renderChat(){const key=curPlayerChatKey||("elverton_chat_"+cur.name);const arr=safeJSON(key,[]);$("chat").innerHTML=arr.length?arr.map(x=>'<div class="bubble '+(x.who==="me"?"me":"ai")+'">'+esc(x.text)+'</div>').join(""):'<div class="bubble ai">무슨 이야기든 직접 물어보세요. 경기, 출전시간, 이적, 감독, 동료에 대한 생각까지 답하겠습니다.</div>';$("chat").scrollTop=$("chat").scrollHeight}
-function sendPlayer(){const q=$("msg").value.trim();if(!q||!cur)return;const key="elverton_chat_"+cur.name;const arr=JSON.parse(localStorage.getItem(key)||"[]");arr.push({who:"me",text:q});arr.push({who:"ai",text:playerReply(cur,q)});localStorage.setItem(key,JSON.stringify(arr.slice(-30)));$("msg").value="";renderChat()}
+function sendPlayer(){const q=$("msg").value.trim();if(!q||!cur)return;const key=curPlayerChatKey||("elverton_chat_"+cur.name);const arr=safeJSON(key,[]);arr.push({who:"me",text:q});arr.push({who:"ai",text:playerReply(cur,q,key)});localStorage.setItem(key,JSON.stringify(arr.slice(-40)));$("msg").value="";renderChat()}
 $("send").addEventListener("click",sendPlayer);$("requestPlayerMeeting").addEventListener("click",ownerMeetingPlayer);$("playerRequestsMeeting").addEventListener("click",()=>playerMeetingRequest(cur));$("msg").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendPlayer()}});$("back").addEventListener("click",()=>{$("room").classList.remove("show");curPlayerChatKey=null;$("players").classList.remove("hidden")});
 
 function playerStatus(p){const s=squadState[p.name];if(s.request)return'<span class="badge red">이적 요청</span>';if(s.bench>=3)return'<span class="badge red">불만</span>';if(s.morale>=80)return'<span class="badge green">만족</span>';return'<span class="badge">보통</span>'}
@@ -204,7 +222,18 @@ return [
 "버질 반 다이크: 주장단에서도 선수들의 분위기와 반응을 확인해보겠습니다."
 ];
 }
-function sendStaffMessage(){const q=$("staffMsg").value.trim();if(!q)return;const key=$("staffMsg").dataset.key;if(!key)return;const arr=safeJSON(key,[]);arr.push({who:"me",text:q});if(key==="elverton_emergency_chat"){emergencyReply(q).forEach(text=>arr.push({who:"ai",text}));}else{let reply="";if(curStaff.type==="manager"){const low=q.toLowerCase();const mentioned=players.filter(p=>q.includes(p.name));const names=mentioned.map(p=>p.name);const named=names.length?names.join("과 "):"";const others=players.filter(p=>!names.includes(p.name));const pick=others[Math.floor(Math.abs(hashCode(q))%Math.max(1,others.length))];const second=others.filter(p=>p.name!==pick?.name)[Math.floor(Math.abs(hashCode(q+"2"))%Math.max(1,others.filter(p=>p.name!==pick?.name).length))];if(/이적|방출|매각/.test(low)){if(names.length){reply="레이턴 베인스: "+named+"을 보내자는 이야기라면 저는 조금 더 고민해보고 싶습니다. "+names[0]+"은(는) 지금 전술에서 "+(names[0].pos==="FW"?"공격의 폭과 결정적인 장면":"볼을 전진시키고 경기 템포를 만드는 역할")+"을 맡고 있습니다. 다만 "+(pick?pick.name:"다른 선수")+"의 활용도가 올라온다면 상황이 달라질 수도 있습니다.";}else reply="레이턴 베인스: 이적 자체를 반대한다기보다 누굴 보내느냐가 중요합니다. 지금은 선수단 안에서 역할이 겹치는 선수부터 따져봐야 합니다. "+(pick?pick.name+"의 최근 활용도":"주전 경쟁")+
+function naturalStaffReply(q,arr,s){
+const t=q.trim();
+if(/^(야|저기|잠깐)$/.test(t))return"왜, 구단주님?";
+if(/^(왜|뭔데|뭐야)$/.test(t))return"응, 무슨 얘기야?";
+if(/^(응|어|ㅇㅇ|그래|그래\?|진짜\?)$/.test(t))return"응. 계속 말해봐.";
+if(/^(아니|ㄴㄴ)$/.test(t))return"아니야? 그럼 뭐가 다른데?";
+if(/^(그게 아니라)$/.test(t))return"아, 그게 아니야? 다시 말해봐.";
+if(/^(그래서\?|그럼\?|근데\?)$/.test(t))return"그래서 내가 보기엔 이래.";
+if(/^(알겠어|오케이|ㅇㅋ)$/.test(t))return"응.";
+return null;
+}
+function sendStaffMessage(){const q=$("staffMsg").value.trim();if(!q)return;const key=$("staffMsg").dataset.key;if(!key)return;const arr=safeJSON(key,[]);arr.push({who:"me",text:q});if(key==="elverton_emergency_chat"){emergencyReply(q).forEach(text=>arr.push({who:"ai",text}));}else{let reply="";if(curStaff.type==="manager"){const low=q.toLowerCase();const staffKey=$("staffMsg").dataset.key;const prior=safeJSON(staffKey,[]);const short=naturalStaffReply(q,prior,curStaff);if(short){arr.push({who:"ai",text:short});localStorage.setItem(key,JSON.stringify(arr.slice(-40)));$("staffMsg").value="";renderStaffChat(key);return;}const mentioned=players.filter(p=>q.includes(p.name));const names=mentioned.map(p=>p.name);const named=names.length?names.join("과 "):"";const others=players.filter(p=>!names.includes(p.name));const pick=others[Math.floor(Math.abs(hashCode(q))%Math.max(1,others.length))];const second=others.filter(p=>p.name!==pick?.name)[Math.floor(Math.abs(hashCode(q+"2"))%Math.max(1,others.filter(p=>p.name!==pick?.name).length))];if(/이적|방출|매각/.test(low)){if(names.length){reply="레이턴 베인스: "+named+"을 보내자는 이야기라면 저는 조금 더 고민해보고 싶습니다. "+names[0]+"은(는) 지금 전술에서 "+(names[0].pos==="FW"?"공격의 폭과 결정적인 장면":"볼을 전진시키고 경기 템포를 만드는 역할")+"을 맡고 있습니다. 다만 "+(pick?pick.name:"다른 선수")+"의 활용도가 올라온다면 상황이 달라질 수도 있습니다.";}else reply="레이턴 베인스: 이적 자체를 반대한다기보다 누굴 보내느냐가 중요합니다. 지금은 선수단 안에서 역할이 겹치는 선수부터 따져봐야 합니다. "+(pick?pick.name+"의 최근 활용도":"주전 경쟁")+
 "까지 같이 보고 결정하겠습니다.";}else if(/선발|주전|출전|왜.*안|왜.*빼/.test(low)){if(names.length){reply="레이턴 베인스: "+named+" 얘기라면 이유가 있습니다. "+names[0]+"을(는) 이번에는 "+(names[0].pos==="FW"?"상대 수비 뒷공간을 노리는 카드":"중원에서 압박을 풀어주는 카드")+"로 봤습니다. 대신 "+(pick?pick.name:"다른 선수")+"와 경쟁 구도였고, 훈련에서 보여준 차이까지 고려했습니다.";}else reply="레이턴 베인스: 선발은 이름값만 보고 정하지 않습니다. 최근 훈련과 경기 흐름을 같이 봅니다. 예를 들어 "+(pick?pick.name:"주전 경쟁 선수")+"의 최근 상태가 좋아서 이번 선택에 영향을 줬습니다.";}else if(/전술|포메이션|3백|4백|공격|수비/.test(low)){reply="레이턴 베인스: 저는 지금 선수단 구성을 보면 "+(pick?pick.name:"중원")+"을 중심으로 생각하고 있습니다. "+(second?second.name:"공격진")+"과의 연결이 좋아야 우리가 원하는 속도가 나옵니다. 전술은 그 조합을 살리는 쪽으로 가겠습니다.";}else if(/파머|팔머/.test(low)){reply="레이턴 베인스: 콜 파머 얘기라면, 저는 파머를 단순히 공격수 한 명으로 보지 않습니다. 파머가 내려와 공을 받으면 "+(pick?pick.name:"바르콜라")+"가 더 높은 위치에서 움직일 수 있고, 그게 우리 공격의 장점입니다.";}else{reply="레이턴 베인스: 그 부분은 저도 고민하고 있습니다. 지금 선수단에서는 "+(pick?pick.name:"몇몇 선수")+"의 역할을 어떻게 나누느냐가 꽤 중요합니다. 구단주님이 생각하는 방향을 들으면 제 쪽에서도 현실적으로 맞춰볼 수 있습니다.";}}else reply=curStaff.name+": "+staffOpinion(curStaff,q);arr.push({who:"ai",text:reply});}localStorage.setItem(key,JSON.stringify(arr.slice(-40)));$("staffMsg").value="";renderStaffChat(key);}
 
 function staffRequestMeeting(i){const s=staff[i];const st=staffState[s.id]||{};st.pending=true;st.lastTopic=staffMeetingTopic(s);staffState[s.id]=st;save();openStaffChat(s,st.lastTopic,false);renderStaff();}
