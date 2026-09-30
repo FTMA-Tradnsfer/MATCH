@@ -62,8 +62,11 @@ button,input,textarea,select{font:inherit}button{touch-action:manipulation;-webk
 <div class="panel">
 <h3>경기 입력</h3>
 <div class="row"><input id="opponent" class="field" placeholder="상대팀"><input id="result" class="field" placeholder="예: 2-1 승"></div>
-<textarea id="starters" class="field area" placeholder="선발 11명 · 쉼표 또는 줄바꿈으로 입력"></textarea>
-<textarea id="ratings" class="field area" placeholder="평점 선택 입력 · 예: 맥 알리스터 8.1, 파머 7.4"></textarea>
+<div class="row"><select id="competition" class="field"><option value="">대회 종류</option><option>판타지리그</option><option>FA컵</option><option>리그컵</option><option>챔피언스리그</option><option>유로파리그</option><option>친선경기</option><option>기타</option></select><select id="venue" class="field"><option value="">홈 / 원정</option><option value="H">홈</option><option value="A">원정</option></select></div>
+<textarea id="starters" class="field area" placeholder="선발 라인업 11명 · 쉼표 또는 줄바꿈"></textarea>
+<textarea id="subs" class="field area" placeholder="교체 기록 · 예: 62' 모이스 킨 OUT → 조너선 데이비드 IN&#10;74' 바르콜라 OUT → 누사 IN"></textarea>
+<textarea id="minutes" class="field area" placeholder="출전시간 · 예: 조너선 데이비드 28분, 누사 16분, 쉬크 90분"></textarea>
+<textarea id="ratings" class="field area" placeholder="평점 · 예: 맥 알리스터 8.1, 파머 7.4, 데이비드 7.8"></textarea>
 <button id="applyMatch" class="primary">경기 결과 반영하기</button>
 </div>
 <div class="section-title">최근 자동 반응</div><div id="matchEvents" class="panel"></div>
@@ -189,7 +192,44 @@ const financeState=safeJSON("elverton_finance_state",null)||{base:500,sponsor:35
 function saveFinance(){localStorage.setItem("elverton_finance_state",JSON.stringify(financeState))}
 function renderFinance(){const net=financeState.transactions.reduce((a,t)=>a+t.fee,0);const income=financeState.transactions.filter(t=>t.fee>0).reduce((a,t)=>a+t.fee,0);const expense=Math.abs(financeState.transactions.filter(t=>t.fee<0).reduce((a,t)=>a+t.fee,0));$("financeSummary").innerHTML='<h3>구단 재정</h3><p class="hint">기초 자금 500M + 스폰서비 35M</p><div class="row"><div class="event good"><b>현재 가용 자금</b><div style="font-size:20px;font-weight:950;color:#d9b761;margin-top:5px">'+financeState.balance+'M</div></div><div class="event"><b>장부 순변동</b><div style="font-size:20px;font-weight:950;margin-top:5px">'+(net>=0?"+":"")+net+'M</div></div></div><div class="small" style="margin-top:8px">총 수입 '+income+'M · 총 지출 '+expense+'M · 선수 교환으로 캉테·맥 알리스터 영입이 선수단에 반영됨</div>';$("transferList").innerHTML=financeState.transactions.map(t=>'<div class="event '+(t.fee<0?"danger":"good")+'"><b>'+esc(t.player)+'</b><div>'+esc(t.detail)+'</div><div style="margin-top:5px;color:#aaa0ad">'+esc(t.from||"")+" → "+esc(t.to||"")+' · <strong style="color:'+(t.fee<0?"#ff9cad":"#9fe0bb")+'">'+(t.fee>0?"+":"")+t.fee+'M</strong></div><span class="muted">'+esc(t.date)+'</span></div>').join("")}
 function ensureFinance(){if(!localStorage.getItem("elverton_finance_state"))saveFinance();renderFinance()}
-function matchReaction(){const opponent=$("opponent").value.trim(),res=$("result").value.trim(),raw=$("starters").value.trim(),ratings=$("ratings").value.trim();if(!raw){alert("선발 11명을 입력해 주세요.");return}const names=raw.split(/[,\\n]+/).map(cleanName).filter(Boolean),set=new Set(names.map(findPlayer).filter(Boolean).map(p=>p.name)),rt=resultType(res),notes=[];const ratingMap={};ratings.split(/[,\\n]+/).forEach(x=>{const m=x.match(/(.+?)\\s+(\\d+(?:\\.\\d+)?)/);if(m){const p=findPlayer(m[1]);if(p)ratingMap[p.name]=Number(m[2])}});players.forEach(p=>{const s=squadState[p.name];if(set.has(p.name)){s.starts++;s.bench=0;if(ratingMap[p.name])s.form=ratingMap[p.name]}else{s.bench++;}s.last5.push({r:rt,start:set.has(p.name),rating:ratingMap[p.name]||null});if(s.last5.length>5)s.last5.shift();let msg="";const role=roleOf(p);if(set.has(p.name)&&ratingMap[p.name]>=8)s.morale=Math.min(100,s.morale+5);if(!set.has(p.name)&&s.bench>=3&&role==="key"){s.morale=Math.max(0,s.morale-10);if(!s.demands.includes("선발 출전 요구"))s.demands.push("선발 출전 요구");msg=p.name+"이(가) 3경기 연속 선발에서 빠져 출전시간에 대한 불만을 표시했습니다."}if(!set.has(p.name)&&s.bench>=4&&(role==="key"||role==="first")){s.morale=Math.max(0,s.morale-8);if(!s.demands.includes("출전시간 보장 요구"))s.demands.push("출전시간 보장 요구");msg=p.name+"이(가) 계속 선발에서 빠지면서 출전시간 보장을 요구합니다."}if(rt==="L"&&!set.has(p.name)&&role==="key"){s.morale=Math.max(0,s.morale-4);msg=msg||p.name+"이(가) 패배 후 출전 기회를 늘려야 한다고 주장했습니다."}if(s.morale<=42&&!s.request&&(s.bench>=4||(rt==="L"&&s.bench>=3))){s.request=true;s.demands.push("이적 요청");msg=p.name+"이(가) 구단에 공식적으로 이적 요청 의사를 전달했습니다."}if(msg)notes.push(msg)});save();const title=(opponent||"상대팀")+" · "+(res||"결과");const text=notes.length?notes.join("\\n"):"즉시 발생한 강한 불만은 없습니다. 선수단은 현재 결과를 받아들이고 있습니다.";addInbox(title,text,notes.some(x=>x.includes("이적 요청"))?"danger":"");$("matchEvents").innerHTML='<div class="report"><b>'+esc(title)+'</b><p>'+esc(text).replace(/\\n/g,"<br>")+'</p></div>';renderPlayers();renderInbox();renderStaff();$("starters").value="";$("ratings").value=""}
+function parseSubstitutions(raw){const out={};String(raw||"").split(/[\n;]+/).map(s=>s.trim()).filter(Boolean).forEach(line=>{let m=line.match(/(\d+)\s*['’]?\s*(?:분)?\s*[:：-]?\s*(.+?)\s*(?:OUT|아웃|교체)\s*(?:→|->|>)\s*(.+?)(?:\s*IN|\s*인)?$/i);if(!m)m=line.match(/(\d+)\s*['’]?\s*(.+?)\s*(?:→|->|>)\s*(.+)$/);if(m){const minute=Number(m[1]),outP=findPlayer(m[2]),inP=findPlayer(m[3]);if(outP){out[outP.name]={minute,action:"OUT",inName:inP?inP.name:""};}if(inP){out[inP.name]={minute,action:"IN",outName:outP?outP.name:""};}}});return out;}
+function parseMinutes(raw){const out={};String(raw||"").split(/[,\n;]+/).map(s=>s.trim()).filter(Boolean).forEach(v=>{const m=v.match(/(.+?)\s*(?:-|:)\s*(\d+)\s*분|(.+?)\s+(\d+)\s*분/i);if(m){const name=findPlayer(m[1]||m[3]);const mins=Number(m[2]||m[4]);if(name)out[name.name]=mins;}});return out;}
+function matchReaction(){
+const opponent=$("opponent").value.trim(),res=$("result").value.trim(),competition=$("competition").value.trim(),venue=$("venue").value,raw=$("starters").value.trim(),subsRaw=$("subs").value.trim(),minutesRaw=$("minutes").value.trim(),ratings=$("ratings").value.trim();
+if(!raw){alert("선발 11명을 입력해 주세요.");return}
+if(!competition||!venue){alert("대회 종류와 홈/원정을 입력해 주세요.");return}
+const names=raw.split(/[,\n]+/).map(cleanName).filter(Boolean),set=new Set(names.map(findPlayer).filter(Boolean).map(p=>p.name)),rt=resultType(res),notes=[],reactions=[];
+const subMap=parseSubstitutions(subsRaw),minuteMap=parseMinutes(minutesRaw),ratingMap={};
+ratings.split(/[,\n]+/).forEach(v=>{const m=v.match(/(.+?)\s+(\d+(?:\.\d+)?)/);if(m){const p=findPlayer(m[1]);if(p)ratingMap[p.name]=Number(m[2]);}});
+players.forEach(p=>{
+const s=squadState[p.name],started=set.has(p.name),sub=subMap[p.name],mins=minuteMap[p.name]??(started?(sub?.minute?sub.minute:90):(sub&&sub.action==="IN"?90-sub.minute:0));
+if(started){s.starts++;s.bench=0;if(ratingMap[p.name])s.form=ratingMap[p.name];}
+else{s.bench++;if(sub&&sub.action==="IN"){s.appearances=(s.appearances||0)+1;s.lastAppearanceMinutes=mins;s.bench=0;}}
+if(started&&sub&&sub.action==="OUT"){s.lastAppearanceMinutes=mins;s.subOffCount=(s.subOffCount||0)+1;}
+s.last5.push({r:rt,start:started,sub:!!sub,rating:ratingMap[p.name]||null,minutes:mins,competition,venue});if(s.last5.length>5)s.last5.shift();
+let msg="",tone="neutral";const role=roleOf(p);
+if((started||sub&&sub.action==="IN")&&ratingMap[p.name]>=8){s.morale=Math.min(100,s.morale+5);msg=p.name+"은(는) 좋은 평점을 받아 경기력에 만족감을 보였습니다.";tone="good";}
+if(sub&&sub.action==="IN"&&mins>0){if(mins<15){s.morale=Math.max(0,s.morale-2);msg=p.name+"은(는) 짧은 출전시간에 아쉬움을 느꼈습니다. '조금 더 뛰고 싶었다'는 반응입니다.";tone="danger";}else if(msg===""){msg=p.name+"은(는) 교체 투입 후 자신의 역할을 수행했습니다.";tone="good";}}
+if(sub&&sub.action==="OUT"&&mins<70){s.morale=Math.max(0,s.morale-3);msg=p.name+"은(는) "+mins+"분에 교체된 것에 아쉬움을 표했습니다. '조금 더 뛸 수 있었다'는 반응입니다.";tone="danger";}
+if(!started&&!sub&&s.bench>=1){if(rt==="W"&&role==="first"){s.morale=Math.max(0,s.morale-1);msg=p.name+"은(는) 승리에도 출전하지 못한 것에 아쉬움을 보였습니다. '이런 경기에서는 저도 기회를 받고 싶었다'고 말했습니다.";}else if(rt==="L"&&["key","first"].includes(role)){s.morale=Math.max(0,s.morale-4);msg=p.name+"은(는) 패배를 벤치에서 지켜본 것에 강한 아쉬움을 표했습니다. '왜 저를 안 썼는지 모르겠다'는 반응입니다.";tone="danger";}}
+if(!started&&sub&&sub.action==="IN"&&mins<30&&rt==="L"){s.morale=Math.max(0,s.morale-2);msg=p.name+"은(는) 패배 상황에서 짧게 투입된 것에 아쉬움을 표했습니다.";tone="danger";}
+if(started&&sub&&sub.action==="OUT"&&rt==="W"&&mins>=70){s.morale=Math.min(100,s.morale+1);msg=p.name+"은(는) 팀의 승리에 만족하면서도 교체 시점에는 조금 아쉬움을 느꼈습니다.";tone="good";}
+if(!started&&s.bench>=3&&role==="key"){s.morale=Math.max(0,s.morale-10);if(!s.demands.includes("선발 출전 요구"))s.demands.push("선발 출전 요구");msg=p.name+"이(가) 3경기 연속 선발에서 빠져 '저를 왜 계속 빼는지 모르겠다'며 선발 출전을 요구했습니다.";tone="danger";}
+if(!started&&s.bench>=4&&(role==="key"||role==="first")){s.morale=Math.max(0,s.morale-8);if(!s.demands.includes("출전시간 보장 요구"))s.demands.push("출전시간 보장 요구");msg=p.name+"이(가) 계속 선발에서 빠지면서 출전시간 보장을 요구합니다.";tone="danger";}
+if(s.morale<=42&&!s.request&&(s.bench>=4||(rt==="L"&&s.bench>=3))){s.request=true;s.demands.push("이적 요청");msg=p.name+"이(가) 구단에 공식적으로 이적 요청 의사를 전달했습니다.";tone="danger";}
+if(msg)reactions.push({name:p.name,text:msg,tone});
+});
+const venueText=venue==="H"?"홈":"원정",title=(opponent||"상대팀")+" · "+(res||"결과"),meta=(competition||"대회")+" · "+venueText;
+const text=reactions.length?reactions.map(x=>x.text).join("\n"):"즉시 발생한 강한 반응은 없습니다. 선수단은 경기 결과와 출전 배분을 받아들이고 있습니다.";
+const history=safeJSON("elverton_match_history",[]);
+history.unshift({opponent,result:res,competition,venue:venueText,starters:names,subs:subsRaw,minutes:minutesRaw,ratings,reactions,time:new Date().toLocaleString("ko-KR")});
+localStorage.setItem("elverton_match_history",JSON.stringify(history.slice(0,30)));
+save();
+addInbox(meta+" · "+title,text,reactions.some(x=>x.tone==="danger")?"danger":reactions.some(x=>x.tone==="good")?"good":"");
+$("matchEvents").innerHTML='<div class="report"><b>'+esc(meta+" · "+title)+'</b><p>'+esc("선발: "+names.join(", ")+"\n"+(subsRaw?"교체: "+subsRaw:"교체 없음")+"\n"+(minutesRaw?"출전시간: "+minutesRaw:"출전시간 기록 없음")+"\n\n"+text).replace(/\n/g,"<br>")+'</p></div>';
+renderPlayers();renderInbox();renderStaff();
+$("starters").value="";$("subs").value="";$("minutes").value="";$("ratings").value="";
+}
 $("applyMatch").addEventListener("click",matchReaction);
 
 document.addEventListener("click",function(ev){const t=ev.target.closest(".tab");if(t){document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));t.classList.add("on");["players","staff","match","inbox","finance"].forEach(id=>$(id).classList.toggle("hidden",id!==t.dataset.tab));$("room").classList.remove("show");$("staffRoom").classList.remove("show");curPlayerChatKey=null;if(t.dataset.tab==="staff")renderStaff();if(t.dataset.tab==="inbox")renderInbox();return;} });
