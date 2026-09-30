@@ -12,7 +12,7 @@ button,input,textarea{font:inherit}button{touch-action:manipulation;-webkit-tap-
 .opinion{border:1px solid #32263b;background:#15101a;border-radius:18px;padding:14px;margin:8px 14px}.opinion .who{font-size:11px;color:#d9b761;font-weight:900}.opinion p{font-size:12px;line-height:1.55;margin:7px 0 0;color:#ddd6e1}
 .room{display:none;margin:0 14px;border:1px solid #32263b;border-radius:20px;overflow:hidden;background:#0d0a10}.room.show{display:block}.rhead{padding:15px;background:linear-gradient(135deg,#24142f,#120d16);display:flex;align-items:center}.rhead .av{width:51px;height:51px}.rname{font-size:17px;font-weight:950}.rmeta{font-size:10px;color:#a79cad;margin-top:3px}.close{margin-left:auto;border:1px solid #45374c;background:#17111d;color:#fff;border-radius:10px;padding:8px 10px;font-size:10px}
 .profile{padding:13px;border-bottom:1px solid #28202d}.line{font-size:10px;line-height:1.5;margin:6px 0}.line b{color:#d9b761}.chat{height:330px;overflow:auto;padding:12px}.bubble{max-width:87%;padding:10px 12px;border-radius:14px;margin:7px 0;font-size:12px;line-height:1.55;white-space:pre-wrap}.ai{background:#18131d;border:1px solid #29212f}.me{margin-left:auto;background:#60347b}.compose{display:flex;gap:7px;padding:10px;border-top:1px solid #29212f}.compose textarea{min-width:0;flex:1;height:47px;resize:none;background:#17111c;border:1px solid #33283a;color:white;border-radius:12px;padding:9px;font-size:12px}.send{background:#d9b761;border:0;border-radius:12px;padding:0 15px;font-weight:950;color:#17110a}.note{padding:0 13px 13px;color:#817788;font-size:9px;line-height:1.5}
-.hidden{display:none!important}
+.ops{margin:0 14px 14px;border:1px solid #32263b;border-radius:18px;background:#120e17;padding:14px}.ops h3{margin:0 0 4px;font-size:15px}.ops p{margin:0 0 10px;color:#95899d;font-size:10px;line-height:1.5}.ops input,.ops textarea{width:100%;background:#17111c;border:1px solid #33283a;color:#fff;border-radius:11px;padding:10px;font-size:11px;margin-top:7px}.ops textarea{height:58px;resize:none}.ops .row{display:flex;gap:7px}.ops .row>*{flex:1}.ops .run{width:100%;margin-top:9px;background:#d9b761;color:#17110a;border:0;border-radius:11px;padding:10px;font-weight:900}.events{margin-top:10px}.event{padding:11px;border:1px solid #302536;border-radius:13px;background:#17121b;margin-top:7px}.event b{color:#d9b761;font-size:11px}.event div{font-size:11px;line-height:1.55;margin-top:4px}.danger{border-color:#5a2635}.muted{color:#8e8295;font-size:10px}..hidden{display:none!important}
 </style></head><body>
 <div class="app">
 <header class="head"><div class="ey">ELVERTON FOOTBALL CLUB</div><div class="title">AI SQUAD</div><div class="sub">01/02 · 선수단 대화 & 이적 의사 시스템 · 완전 무료 구조</div></header>
@@ -34,146 +34,28 @@ button,input,textarea{font:inherit}button{touch-action:manipulation;-webkit-tap-
 const players=[{"name":"조르제 페트로비치","pos":"GK","num":"#1","icon":"🧤","trait":"침착함 · 자신감","rel":"주장단과 신뢰 관계 · 경기 출전 의지","history":"이전 클럽 → Elverton"},{"name":"콘스탄티노스 촐라키스","pos":"GK","num":"#13","icon":"🧤","trait":"침착함 · 성장 지향","rel":"페트로비치와 경쟁 관계 · 출전 기회 중요","history":"이전 클럽 → Elverton"},{"name":"마르크 쿠쿠렐라","pos":"DF","num":"#3","icon":"🛡️","trait":"활동적 · 경쟁심","rel":"수비진 동료들과 긴밀 · 팀 전술 관심","history":"이전 클럽 → Elverton"},{"name":"버질 반 다이크","pos":"DF","num":"#4","icon":"🧠","trait":"리더십 · 경험 · 높은 프로의식","rel":"주장 · 베인스 감독 신뢰도 높음","history":"Groningen → Celtic → Southampton → Liverpool (2018–현재) → Elverton"},{"name":"티노 리브라멘토","pos":"DF","num":"#2","icon":"⚡","trait":"공격적 · 자신감","rel":"측면 경쟁자들과 경쟁적 관계","history":"이전 클럽 → Elverton"},{"name":"루카 부슈코비치","pos":"DF","num":"#84","icon":"🧱","trait":"야망 · 성장 지향","rel":"젊은 수비진과 친밀 · 출전 기회 중요","history":"이전 클럽 → Elverton"},{"name":"조르조 스칼비니","pos":"DF","num":"#44","icon":"🧱","trait":"침착함 · 전술 이해","rel":"반 다이크에게서 배우려는 관계","history":"이전 클럽 → Elverton"},{"name":"막심 더카위퍼르","pos":"DF","num":"#21","icon":"🛡️","trait":"성실함 · 적응력","rel":"수비진 로테이션 경쟁","history":"이전 클럽 → Elverton"},{"name":"제이든 보글","pos":"DF","num":"#27","icon":"⚡","trait":"직선적 · 투지","rel":"측면 수비 경쟁 · 출전 의지 강함","history":"이전 클럽 → Elverton"},{"name":"스벤 보트만","pos":"DF","num":"#5","icon":"🧱","trait":"강인함 · 집중력","rel":"센터백 경쟁자들과 경쟁적 관계","history":"이전 클럽 → Elverton"},{"name":"라이언 흐라번베르흐","pos":"MF","num":"#6","icon":"🚀","trait":"자신감 · 전진성","rel":"중원 핵심 동료들과 전술적 신뢰","history":"이전 클럽 → Elverton"},{"name":"알렉시스 맥 알리스터","pos":"MF","num":"#8","icon":"🎯","trait":"지능적 · 냉정함 · 전술적","rel":"흐라번베르흐와 중원 호흡 · 팀 전술 중시","history":"Argentinos Juniors → Brighton → Liverpool → Elverton"},{"name":"아담 워턴","pos":"MF","num":"#38","icon":"🧠","trait":"성장형 · 냉정함","rel":"중원 경쟁자들과 좋은 관계 · 성장 욕구","history":"이전 클럽 → Elverton"},{"name":"키스 스미트","pos":"MF","num":"#92","icon":"💬","trait":"사교적 · 긍정적","rel":"라커룸 분위기 메이커","history":"이전 클럽 → Elverton"},{"name":"에베레치 에제","pos":"MF","num":"#11","icon":"✨","trait":"자유로움 · 창의적","rel":"공격진과 연계 중시","history":"이전 클럽 → Elverton"},{"name":"은골로 캉테","pos":"MF","num":"#7","icon":"🛡️","trait":"성실함 · 겸손함 · 팀 지향","rel":"베테랑으로서 중원 조언자 역할","history":"Boulogne → Caen → Leicester City → Chelsea → Al-Ittihad → Elverton"},{"name":"브래들리 바르콜라","pos":"FW","num":"#7","icon":"👥","trait":"사교적 · 적응력 · 팀 지향","rel":"공격진 핵심 · 새로운 선수 적응 지원","history":"AS Buers → Lyon Academy → Lyon (2021–2023) → Paris Saint-Germain (2023–2026) → Liverpool (2026–현재) → Elverton"},{"name":"파트리크 쉬크","pos":"FW","num":"#9","icon":"🎯","trait":"침착함 · 결정력","rel":"부주장 · 공격진 리더","history":"Sparta Prague → Sampdoria → Roma → RB Leipzig → Bayer Leverkusen → Elverton"},{"name":"모건 로저스","pos":"FW","num":"#17","icon":"🔥","trait":"자신감 · 직선적","rel":"바르콜라와 공격진 경쟁 · 출전 의지 강함","history":"Manchester City Academy → Middlesbrough → Aston Villa → Elverton"},{"name":"모이스 킨","pos":"FW","num":"#18","icon":"🔥","trait":"자신감 · 승부욕","rel":"스트라이커 경쟁자들과 경쟁적","history":"Juventus → Everton → PSG → Juventus → Fiorentina → Juventus → Elverton"},{"name":"아데몰라 루크먼","pos":"FW","num":"#31","icon":"⚡","trait":"적극적 · 승부욕","rel":"측면 공격수들과 경쟁 · 득점 기여 중시","history":"Charlton Athletic → Everton → RB Leipzig → Atalanta → Elverton"},{"name":"바주마나 투레","pos":"FW","num":"#99","icon":"💪","trait":"투지 · 에너지","rel":"젊은 공격진과 친밀 · 출전 기회 중요","history":"이전 클럽 → Elverton"},{"name":"안토니오 누사","pos":"FW","num":"#14","icon":"⚡","trait":"대담함 · 창의적 · 성장 지향","rel":"젊은 공격진과 친밀 · 성장과 출전시간 중시","history":"Club Brugge → RB Leipzig → Elverton"},{"name":"콜 파머","pos":"MF","num":"#10","icon":"✨","trait":"야망 · 자신감 · 성장 지향","rel":"공격진 핵심 · 주장단과 적극적 소통","history":"Manchester City Academy → Manchester City (2020–2023) → Chelsea (2023–현재) → Elverton"},{"name":"아니스 하지 무사","pos":"FW","num":"#77","icon":"✨","trait":"기술적 · 창의적 · 적극적","rel":"공격진 로테이션 경쟁 · 출전 기회 중요","history":"이전 클럽 → Elverton"}];
 const captainNames=["버질 반 다이크","파트리크 쉬크"];
 let cur=null;
-function $(id){return document.getElementById(id)}
-function esc(s){return String(s).replace(/[&<>"']/g,x=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[x]))}
-function greeting(){
-const greetings={
-"버질 반 다이크":"무슨 이야기인지 들어보죠. 팀 얘기라면 편하게 말해도 됩니다. 제가 생각하는 건 솔직하게 말씀드릴게요.",
-"파트리크 쉬크":"네, 말씀하세요. 경기나 출전 문제든 팀 얘기든 제 생각은 솔직하게 말하겠습니다.",
-"콜 파머":"뭐가 궁금한데요? 경기 얘기든 팀 얘기든 편하게 물어보세요.",
-"브래들리 바르콜라":"네, 물어보세요. 팀 얘기라면 저도 솔직하게 말할게요.",
-"모건 로저스":"말씀하세요. 저는 제 생각 확실하게 얘기할게요.",
-"모이스 킨":"네. 궁금한 거 있으면 바로 물어보세요. 돌려서 말하는 건 별로 안 좋아합니다.",
-"에베레치 에제":"네, 얘기해보죠. 축구 얘기라면 뭐든 편하게 말할 수 있어요.",
-"은골로 캉테":"네, 말씀하세요. 팀에 도움이 되는 방향으로 차분하게 이야기하고 싶습니다."
-};
-return greetings[cur.name]||"네, 말씀하세요. 제 입장에서 솔직하게 이야기해볼게요.";
+const squadState=JSON.parse(localStorage.getItem("elverton_squad_state")||"{}");
+players.forEach(p=>{if(!squadState[p.name])squadState[p.name]={starts:0,bench:0,last5:[],morale:72,request:false,demands:[]};});
+function saveSquad(){localStorage.setItem("elverton_squad_state",JSON.stringify(squadState))}
+function cleanName(s){return s.replace(/[#0-9]/g,"").trim()}
+function findPlayer(s){s=cleanName(s);return players.find(p=>p.name===s)||players.find(p=>s.includes(p.name)||p.name.includes(s))}
+function resultType(r){r=(r||"").toLowerCase();if(/승|win/.test(r))return "W";if(/패|loss/.test(r))return "L";return "D"}
+function roleOf(p){if(["버질 반 다이크","파트리크 쉬크","콜 파머","브래들리 바르콜라","알렉시스 맥 알리스터","라이언 흐라번베르흐","모이스 킨"].includes(p.name))return "key";if(["루카 부슈코비치","안토니오 누사","아담 워턴","콘스탄티노스 촐라키스"].includes(p.name))return "prospect";return "first"}
+function matchReaction(opponent,res,startersText,ratings){
+ const names=startersText.split(/[,\n]+/).map(cleanName).filter(Boolean); const starters=names.map(findPlayer).filter(Boolean); const set=new Set(starters.map(p=>p.name)); const rt=resultType(res); const notes=[];
+ players.forEach(p=>{const s=squadState[p.name]; if(set.has(p.name)){s.starts++;s.bench=0}else{s.bench++}s.last5.push({r:rt,start:set.has(p.name)});if(s.last5.length>5)s.last5.shift();});
+ const ratingMap={};(ratings||"").split(/[,\n]+/).forEach(x=>{const m=x.match(/(.+?)\s+(\d+(?:\.\d+)?)/);if(m){const p=findPlayer(m[1]);if(p)ratingMap[p.name]=Number(m[2])}});
+ players.forEach(p=>{const s=squadState[p.name], role=roleOf(p);let msg="";
+   if(!set.has(p.name)&&s.bench>=3&&role==="key"){s.morale-=10;msg=p.name+"이(가) 3경기 연속 선발에서 빠졌습니다. 출전시간에 대한 불만이 발생했습니다.";s.demands.push("선발 출전 요구");}
+   if(!set.has(p.name)&&s.bench>=4&&(role==="key"||role==="first")){s.morale-=12;s.demands.push("출전시간 보장 요구");msg=p.name+"이(가) 계속 선발에서 빠지면서 구단에 출전시간 보장을 요구합니다.";}
+   if(rt==="L"&&!set.has(p.name)&&role==="key"){s.morale-=5;msg=msg||p.name+"이(가) 패배 후 자신의 출전 필요성을 강하게 주장하고 있습니다."}
+   if(ratingMap[p.name]&&ratingMap[p.name]>=8&&set.has(p.name)){s.morale=Math.min(100,s.morale+5)}
+   if(s.morale<=42&&!s.request&&(s.bench>=4||rt==="L"&&s.bench>=3)){s.request=true;s.demands.push("이적 요청");msg=p.name+"이(가) 현재 출전 상황에 강한 불만을 표시하며 이적 요청 의사를 밝혔습니다.";}
+   if(msg)notes.push({p,msg,request:s.request});
+ });
+ saveSquad();renderEvents(notes,opponent,res);return notes;
 }
-function open(i){cur=players[i];$("main").classList.add("hidden");$("room").classList.add("show");$("ri").textContent=cur.icon;$("rn").textContent=cur.name;$("rp").textContent=cur.pos+" · "+cur.num;$("rh").textContent=cur.history;$("rt").textContent=cur.trait;$("rr").textContent=cur.rel;renderChat()}
-function memory(){return JSON.parse(localStorage.getItem(key())||"[]")}
-function renderChat(){
- const a=memory();
- // 대화 기록은 저장하지만 화면에는 가장 최근 한 번의 대화만 보여준다.
- const last=a.length>=2?a.slice(-2):[];
- $("chat").innerHTML=last.length?last.map(x=>'<div class="bubble '+(x.role==="u"?"me":"ai")+'">'+esc(x.text)+'</div>').join(""):'<div class="bubble ai">'+esc(greeting())+'</div>';
- $("chat").scrollTop=$("chat").scrollHeight;
-}
-function recentMemory(){
- const a=memory();
- return a.length?a.slice(-8).map(x=>(x.role==="u"?"구단주: ":cur.name+": ")+x.text).join("\\n"):"대화 기록 없음";
-}
-function naturalReply(q){
- const x=q.toLowerCase(), n=cur.name;
- const direct={
-  "버질 반 다이크":{
-   transfer:"저는 지금 엘버턴에 남겠습니다. 제가 주장이고, 이 팀을 만드는 과정에 책임이 있다고 생각해요. 당장 다른 팀으로 갈 생각 없습니다.",
-   playing:"저는 선발로 뛰고 싶습니다. 제가 몸 상태가 괜찮다면 경기에서 빠지고 싶은 생각은 없어요. 중요한 경기라면 더더욱 제가 뛰겠습니다.",
-   release:"저를 내보내겠다면 이유를 직접 듣겠습니다. 하지만 제가 먼저 나가겠다고 하진 않을 겁니다. 아직 이 팀에서 할 일이 있다고 생각해요.",
-   manager:"베인스 감독을 믿습니다. 전술이나 선수 기용에 의견이 다를 수는 있지만, 뒤에서 불평하지 않고 직접 이야기하겠습니다.",
-   captain:"주장은 이름만 달고 있는 자리가 아니죠. 선수들이 문제가 있을 때 저한테 먼저 올 수 있게 하겠습니다. 필요한 말은 감독에게도 제가 하겠습니다."
-  },
-  "파트리크 쉬크":{
-   transfer:"지금은 남겠습니다. 여기서 중요한 역할을 맡고 있고, 골로 보답하고 싶어요. 쉽게 떠날 생각은 없습니다.",
-   playing:"저는 당연히 선발을 원합니다. 스트라이커는 골로 말해야 하니까요. 계속 벤치에 있다면 감독에게 왜 그런지 직접 물어볼 겁니다.",
-   release:"방출은 싫습니다. 저는 여기서 뛰고 싶어요. 구단이 저를 필요로 하지 않는다고 결정했다면 그때는 이야기하겠지만, 제가 먼저 나가겠다고 하진 않겠습니다.",
-   manager:"베인스 감독에게 제 역할을 분명하게 듣고 싶습니다. 저는 골을 넣는 선수고, 그걸 할 수 있는 위치에서 뛰고 싶어요.",
-   captain:"부주장으로서 선수들 불만을 그냥 넘기진 않을 겁니다. 특히 출전시간 문제는 제가 감독에게 직접 이야기하겠습니다."
-  },
-  "콜 파머":{
-   transfer:"지금 당장 떠날 생각은 없어요. 여기서 제가 중심이 될 수 있다고 생각합니다. 팀이 저를 믿는다면 저도 남겠습니다.",
-   playing:"저는 뛰어야 합니다. 선발로 나가고 싶고, 공을 많이 만지고 싶어요. 제가 경기에서 차이를 만들 수 있다고 생각하니까요.",
-   release:"제가 방출 명단에 있다는 말을 들으면 솔직히 이해 안 될 것 같아요. 저는 여기서 중요한 선수가 되고 싶고, 그렇게 대우받길 원합니다.",
-   manager:"감독님이 저한테 자유를 주셨으면 좋겠어요. 제가 공을 잡았을 때 뭘 해야 하는지 너무 많이 제한하면 제 장점이 없어집니다.",
-   contract:"재계약은 적극적으로 이야기할 생각입니다. 제가 팀에서 중요한 선수라는 걸 구단이 보여준다면 저도 긍정적으로 생각할게요."
-  },
-  "브래들리 바르콜라":{
-   transfer:"저는 남고 싶어요. 여기서 더 많이 뛰고 더 성장하고 싶습니다. 지금 당장 떠날 이유는 없다고 생각해요.",
-   playing:"저는 선발로 뛰고 싶습니다. 특히 공격에서 제가 할 수 있는 게 많다고 생각해요. 기회가 오면 계속 공격적으로 하겠습니다.",
-   release:"방출 얘기를 들으면 당연히 속상하죠. 저는 여기서 계속 뛰고 싶어요. 제가 필요한 선수라는 걸 보여드리고 싶습니다.",
-   manager:"감독님이 공격적으로 하라고 하면 저는 자신 있어요. 일대일 상황에서 제 장점을 살릴 수 있게 해주셨으면 좋겠습니다."
-  },
-  "모건 로저스":{
-   transfer:"저는 여기서 경쟁하겠습니다. 다른 팀 제안이 있다고 바로 떠날 생각은 없어요. 제 자리를 뺏으려면 제가 먼저 보여줘야죠.",
-   playing:"저는 뛰어야 한다고 생각합니다. 벤치에 오래 있을 생각 없습니다. 훈련에서 보여주고 선발을 요구할 겁니다.",
-   release:"방출은 받아들이기 싫습니다. 제가 여기서 경쟁할 기회도 없이 정리되는 건 원하지 않아요. 기회를 달라고 말하겠습니다.",
-   manager:"저는 감독님한테 제 역할을 확실히 물어볼 겁니다. 제가 윙에서 뛰는지, 안으로 들어오는지 명확하게 알고 싶어요."
-  },
-  "모이스 킨":{
-   transfer:"저는 지금 남겠습니다. 제가 여기서 골을 넣을 수 있다고 믿어요. 다른 팀이 관심을 보여도 제가 먼저 떠나겠다고 하진 않을 겁니다.",
-   playing:"저는 뛰어야 합니다. 스트라이커는 경기장에 있어야 골을 넣죠. 계속 벤치라면 저는 감독님한테 직접 이야기할 겁니다.",
-   release:"방출이라면 싫습니다. 저는 제가 아직 보여줄 게 많다고 생각해요. 기회를 주면 골로 답하겠습니다.",
-   manager:"저한테 필요한 건 신뢰입니다. 감독님이 저를 믿고 넣어주시면 저도 골로 답할게요."
-  },
-  "은골로 캉테":{
-   transfer:"저는 팀에 남고 싶습니다. 지금은 팀을 돕는 게 제일 중요합니다. 급하게 움직일 생각은 없습니다.",
-   playing:"저는 출전할 준비가 항상 되어 있습니다. 선발이 아니더라도 들어가서 팀에 도움이 되면 됩니다. 다만 뛸 기회는 받고 싶습니다.",
-   release:"방출 통보를 받으면 구단과 조용히 이야기하겠습니다. 저는 문제를 만들고 싶지는 않지만, 제 의사는 분명히 말씀드릴 겁니다.",
-   manager:"베인스 감독님과 좋은 관계를 유지하고 싶습니다. 제가 팀에서 필요한 일을 정확히 해주면 된다고 생각합니다."
-  },
-  "라이언 흐라번베르흐":{
-   transfer:"저는 여기서 자리 잡고 싶습니다. 아직 보여줄 게 많아요. 다른 팀으로 갈 생각부터 하진 않습니다.",
-   playing:"저는 많이 뛰고 싶습니다. 중원에서 제가 더 전진하고 공격에 참여할 수 있다고 생각해요. 출전시간을 늘리고 싶습니다.",
-   release:"저를 정리한다면 받아들이기 어렵습니다. 저는 이 팀에서 제 능력을 보여주고 싶어요. 기회를 달라고 할 겁니다."
-  },
-  "알렉시스 맥 알리스터":{
-   transfer:"저는 지금 남겠습니다. 팀에서 맡은 역할이 있고, 여기서 좋은 축구를 할 수 있다고 생각합니다.",
-   playing:"저는 선발을 원합니다. 특히 중요한 경기에서는 중원에서 제가 책임지고 경기를 풀고 싶습니다.",
-   manager:"감독님께 전술적인 이야기를 많이 할 겁니다. 저는 제 위치와 역할이 명확해야 가장 좋은 플레이가 나옵니다."
-  },
-  "아담 워턴":{
-   transfer:"저는 남겠습니다. 아직 배우고 성장해야 할 게 많고, 여기서 제 자리를 만들고 싶어요.",
-   playing:"저는 더 많이 뛰고 싶습니다. 벤치에서 기다리기보다 경기장에서 배우는 게 제게 더 도움이 됩니다.",
-   release:"방출은 원하지 않습니다. 제가 아직 성장할 수 있다는 걸 보여드릴 기회를 받고 싶어요."
-  },
-  "에베레치 에제":{
-   transfer:"저는 지금 떠나고 싶지 않아요. 여기서 제 축구를 보여주는 게 즐겁습니다.",
-   playing:"저는 자유롭게 뛰고 싶어요. 공을 잡았을 때 제가 가진 창의성을 보여줄 수 있어야 합니다. 그게 안 되면 답답할 것 같아요.",
-   manager:"감독님이 저한테 자유를 주셨으면 좋겠어요. 저는 정해진 움직임만 하는 선수는 아니니까요."
-  },
-  "아데몰라 루크먼":{
-   transfer:"저는 여기서 경쟁하겠습니다. 제 목표는 경기장에서 계속 영향력을 만드는 겁니다.",
-   playing:"저는 선발을 원합니다. 공격에서 제가 할 수 있는 게 많고, 득점과 어시스트로 보여주고 싶어요.",
-   release:"저는 방출을 받아들이고 싶지 않습니다. 기회를 주시면 결과로 답하겠습니다."
-  },
-  "안토니오 누사":{
-   transfer:"저는 남고 싶어요. 아직 어린 선수고, 여기서 더 많이 뛰면서 성장하고 싶습니다.",
-   playing:"저는 출전시간을 더 받고 싶습니다. 제가 공을 잡았을 때 자신 있게 플레이할 수 있게 기회를 주세요.",
-   release:"저를 내보낸다면 많이 아쉬울 것 같아요. 저는 여기서 제 가능성을 보여주고 싶습니다."
-  },
-  "아니스 하지 무사":{
-   transfer:"저는 일단 여기서 경쟁하고 싶습니다. 다른 팀을 생각하기보다 지금 제 자리를 만드는 게 먼저예요.",
-   playing:"저는 더 뛰고 싶습니다. 공격에서 제가 가진 기술을 보여줄 시간이 필요합니다.",
-   release:"방출은 원하지 않습니다. 저한테 기회를 주시면 제가 왜 필요한 선수인지 보여드리겠습니다."
-  }
- };
- const d=direct[n]||{};
- if(/제치|밀어내|주전.*(먹|차지)|주전.*자신|자리.*뺏|경쟁.*주전/.test(x)){
-  const competition={
-    "알렉시스 맥 알리스터":"자신 있습니다. 캉테도 흐라번베르흐도 좋은 선수라는 건 압니다. 그래도 제가 여기 온 건 벤치에 앉으려고 온 게 아니에요. 감독님이 저를 믿어주시면 중원에서 제 자리를 가져가겠습니다. 경쟁은 경기장에서 하면 됩니다.",
-    "아담 워턴":"자신 있다고 말하고 싶습니다. 캉테나 흐라번베르흐를 존중하지만, 저도 제 장점이 있습니다. 훈련에서 계속 보여주고 기회가 오면 놓치지 않을 겁니다.",
-    "라이언 흐라번베르흐":"쉽진 않겠죠. 그래도 저는 제 자리를 지킬 생각입니다. 캉테가 새로 왔다고 해서 제가 물러날 생각은 없어요. 감독님이 누구를 쓰든 저는 제 플레이로 답하겠습니다.",
-    "은골로 캉테":"경쟁은 당연히 받아들입니다. 흐라번베르흐도 좋은 선수고 저도 제 장점이 있습니다. 누가 뛰어야 하는지는 감독님이 결정하겠지만, 저는 제 기회를 놓치지 않을 겁니다."
-  };
-  return competition[n]||"자신 있습니다. 좋은 선수들과 경쟁하는 건 당연한 일이죠. 제가 선발로 뛸 자격이 있다는 걸 훈련과 경기에서 보여주겠습니다.";
-}
-if(/이적|제의|오퍼|떠나|잔류|transfer/.test(x)) return d.transfer||"저는 지금 팀에 남겠습니다. 여기서 제 역할을 하고 싶어요.";
- if(/출전|선발|벤치|경기|뛰게|출장|시간/.test(x)) return d.playing||"저는 더 뛰고 싶습니다. 기회가 오면 경기장에서 보여드릴게요.";
- if(/방출|명단|내보내|정리/.test(x)) return d.release||"저는 방출을 원하지 않습니다. 여기서 제 가치를 보여줄 기회를 받고 싶습니다.";
- if(/감독|베인스/.test(x)) return d.manager||"감독님과 제 역할에 대해 직접 이야기하겠습니다.";
- if(/주장|부주장|라커룸|분위기/.test(x)) return d.captain||"팀 안에서 제 역할을 제대로 하겠습니다. 문제가 있으면 직접 이야기할 겁니다.";
- if(/재계약|계약|연봉|돈/.test(x)) return d.contract||"계약은 적극적으로 이야기하겠습니다. 제 역할에 맞는 대우를 받고 싶습니다.";
- if(/불만|화나|불편|싫|짜증/.test(x)) return "저도 불만이 생길 수 있습니다. 그런데 뒤에서 말하기보다는 당사자한테 직접 이야기하겠습니다.";
- if(/누구|선수|동료|친구/.test(x)) return "팀 안에서 같이 뛰는 선수들과는 잘 지내려고 합니다. 경기장에서는 서로 경쟁해도 팀이 먼저죠.";
- return n==="버질 반 다이크"?"저는 제 생각을 숨기지 않습니다. 필요한 얘기라면 구단주님께 직접 말씀드릴게요.":n==="콜 파머"?"저는 제가 원하는 게 뭔지 분명한 편이에요. 궁금한 게 있으면 물어보세요.":n==="모이스 킨"?"저는 돌려서 말하는 걸 좋아하지 않습니다. 제 생각은 그냥 바로 말씀드릴게요.":"저는 제 생각을 솔직하게 말씀드릴게요.";
-}
-function reply(q){return naturalReply(q)}
-function send(){
-const q=$("msg").value.trim();if(!q)return;$("msg").value="";
-const a=JSON.parse(localStorage.getItem(key())||"[]");a.push({role:"u",text:q},{role:"a",text:reply(q)});localStorage.setItem(key(),JSON.stringify(a.slice(-80)));renderChat();
-}
-$("send").addEventListener("click",send);$("msg").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send()}});
-$("back").addEventListener("click",()=>{$("room").classList.remove("show");$("main").classList.remove("hidden")});
-$("allBtn").addEventListener("click",()=>{$("allBtn").classList.add("sel");$("captBtn").classList.remove("sel");$("list").classList.remove("hidden");$("captains").classList.add("hidden")});
-$("captBtn").addEventListener("click",()=>{$("captBtn").classList.add("sel");$("allBtn").classList.remove("sel");$("list").classList.add("hidden");$("captains").classList.remove("hidden")});
-renderList();renderCaptains();
-</script></body></html>
+function renderEvents(notes,opponent,res){const box=$("events");if(!box)return;const old=JSON.parse(localStorage.getItem("elverton_events")||"[]");const all=[{title:(opponent||"상대팀")+" · "+(res||"결과 미입력"),text:notes.length?notes.map(x=>x.msg).join("\\n"):"이번 경기 이후 즉시 발생한 선수단 불만은 없습니다.",time:new Date().toLocaleString("ko-KR")},...old].slice(0,12);localStorage.setItem("elverton_events",JSON.stringify(all));box.innerHTML=all.map(e=>'<div class="event '+(e.text.includes("이적 요청")?"danger":"")+'"><b>'+esc(e.title)+'</b><div>'+esc(e.text).replace(/\\n/g,"<br>")+'</div><span class="muted">'+esc(e.time)+'</span></div>').join("")}
+function loadEvents(){const a=JSON.parse(localStorage.getItem("elverton_events")||"[]");$("events").innerHTML=a.map(e=>'<div class="event '+(e.text.includes("이적 요청")?"danger":"")+'"><b>'+esc(e.title)+'</b><div>'+esc(e.text).replace(/\\n/g,"<br>")+'</div><span class="muted">'+esc(e.time)+'</span></div>').join("")}
+$("applyMatch").addEventListener("click",()=>{const o=$("opponent").value.trim(),r=$("result").value.trim(),s=$("starters").value.trim(),ra=$("ratings").value.trim();if(!s){alert("선발 11명을 입력해 주세요.");return}matchReaction(o,r,s,ra);$("starters").value="";$("ratings").value=""});
+>
