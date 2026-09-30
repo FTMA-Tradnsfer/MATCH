@@ -46,7 +46,7 @@ button,input,textarea,select{font:inherit}button{touch-action:manipulation;-webk
 
 <main id="staff" class="hidden">
 <div class="hero"><h2>STAFF ROOM</h2><p>코치진은 수동으로 질문하지 않아도 구단주에게 먼저 의견을 보낼 수 있습니다. 스카우터는 선수 리포트를 제출하고, 감독은 전술·선발·선수단 관리에 대한 면담을 직접 신청합니다.</p></div>
-<<br><br>모든 보고와 면담은 저장됩니다. 경기 결과를 입력하면 감독·수석코치·스카우팅 부서의 후속 의견도 생성됩니다.</div>
+<p class="notice">모든 보고와 면담은 저장됩니다. 경기 결과를 입력하면 감독·수석코치·스카우팅 부서의 후속 의견도 생성됩니다.</p>
 <div class="panel"><button class="primary emergency" id="emergencyMeeting">🚨 구단 긴급회의 · 코치진 + 주장단</button><p style="margin-top:7px">감독·수석코치·전문 코치진과 주장단(반 다이크·쉬크)이 한 채팅에 함께 참여합니다.</p></div>
 <div id="staffList" class="list"></div>
 </main>
@@ -232,7 +232,9 @@ $("starters").value="";$("subs").value="";$("minutes").value="";$("ratings").val
 }
 $("applyMatch").addEventListener("click",matchReaction);
 
-document.addEventListener("click",function(ev){const t=ev.target.closest(".tab");if(t){document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));t.classList.add("on");["players","staff","match","inbox","finance"].forEach(id=>$(id).classList.toggle("hidden",id!==t.dataset.tab));$("room").classList.remove("show");$("staffRoom").classList.remove("show");curPlayerChatKey=null;if(t.dataset.tab==="staff")renderStaff();if(t.dataset.tab==="inbox")renderInbox();return;} });
+function showTab(tab){["players","staff","match","inbox","finance"].forEach(id=>{const el=$(id);if(!el)return;const active=id===tab;el.classList.toggle("hidden",!active);el.style.display=active?"block":"none";});$("room").classList.remove("show");$("staffRoom").classList.remove("show");curPlayerChatKey=null;if(tab==="staff")renderStaff();if(tab==="inbox")renderInbox();}
+document.addEventListener("click",function(ev){const t=ev.target.closest(".tab");if(t){document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));t.classList.add("on");showTab(t.dataset.tab);return;}});
+showTab("players");
 
 renderPlayers();renderCaptains();renderStaff();renderInbox();ensureFinance();
 </script>
